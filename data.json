@@ -1,0 +1,656 @@
+[
+    {
+        "number": 42,
+        "available_bike_stands": 30,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:34:00"
+    },
+    {
+        "number": 30,
+        "available_bike_stands": 20,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:28:40"
+    },
+    {
+        "number": 54,
+        "available_bike_stands": 17,
+        "available_bikes": 15,
+        "last_update": "Tue, 11 Feb 2020 12:34:35"
+    },
+    {
+        "number": 108,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:29:01"
+    },
+    {
+        "number": 56,
+        "available_bike_stands": 3,
+        "available_bikes": 36,
+        "last_update": "Tue, 11 Feb 2020 12:34:31"
+    },
+    {
+        "number": 6,
+        "available_bike_stands": 17,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:34:08"
+    },
+    {
+        "number": 18,
+        "available_bike_stands": 27,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:33:02"
+    },
+    {
+        "number": 32,
+        "available_bike_stands": 26,
+        "available_bikes": 4,
+        "last_update": "Tue, 11 Feb 2020 12:33:44"
+    },
+    {
+        "number": 52,
+        "available_bike_stands": 26,
+        "available_bikes": 6,
+        "last_update": "Tue, 11 Feb 2020 12:29:23"
+    },
+    {
+        "number": 48,
+        "available_bike_stands": 27,
+        "available_bikes": 13,
+        "last_update": "Tue, 11 Feb 2020 12:33:48"
+    },
+    {
+        "number": 13,
+        "available_bike_stands": 3,
+        "available_bikes": 27,
+        "last_update": "Tue, 11 Feb 2020 12:28:01"
+    },
+    {
+        "number": 43,
+        "available_bike_stands": 27,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:29:16"
+    },
+    {
+        "number": 81,
+        "available_bike_stands": 33,
+        "available_bikes": 7,
+        "last_update": "Tue, 11 Feb 2020 12:32:35"
+    },
+    {
+        "number": 31,
+        "available_bike_stands": 20,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:30:23"
+    },
+    {
+        "number": 98,
+        "available_bike_stands": 16,
+        "available_bikes": 24,
+        "last_update": "Tue, 11 Feb 2020 12:34:08"
+    },
+    {
+        "number": 23,
+        "available_bike_stands": 29,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:32:05"
+    },
+    {
+        "number": 106,
+        "available_bike_stands": 37,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:26:59"
+    },
+    {
+        "number": 112,
+        "available_bike_stands": 29,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:24:59"
+    },
+    {
+        "number": 68,
+        "available_bike_stands": 0,
+        "available_bikes": 39,
+        "last_update": "Tue, 11 Feb 2020 12:34:43"
+    },
+    {
+        "number": 74,
+        "available_bike_stands": 20,
+        "available_bikes": 10,
+        "last_update": "Tue, 11 Feb 2020 12:27:41"
+    },
+    {
+        "number": 87,
+        "available_bike_stands": 38,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:25:55"
+    },
+    {
+        "number": 84,
+        "available_bike_stands": 30,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:32:22"
+    },
+    {
+        "number": 90,
+        "available_bike_stands": 2,
+        "available_bikes": 36,
+        "last_update": "Tue, 11 Feb 2020 12:32:21"
+    },
+    {
+        "number": 11,
+        "available_bike_stands": 9,
+        "available_bikes": 21,
+        "last_update": "Tue, 11 Feb 2020 12:34:40"
+    },
+    {
+        "number": 17,
+        "available_bike_stands": 17,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:25:29"
+    },
+    {
+        "number": 45,
+        "available_bike_stands": 29,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:30:55"
+    },
+    {
+        "number": 114,
+        "available_bike_stands": 13,
+        "available_bikes": 26,
+        "last_update": "Tue, 11 Feb 2020 12:34:27"
+    },
+    {
+        "number": 72,
+        "available_bike_stands": 31,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:25:09"
+    },
+    {
+        "number": 63,
+        "available_bike_stands": 17,
+        "available_bikes": 17,
+        "last_update": "Tue, 11 Feb 2020 12:28:36"
+    },
+    {
+        "number": 113,
+        "available_bike_stands": 17,
+        "available_bikes": 23,
+        "last_update": "Tue, 11 Feb 2020 12:29:26"
+    },
+    {
+        "number": 91,
+        "available_bike_stands": 10,
+        "available_bikes": 19,
+        "last_update": "Tue, 11 Feb 2020 12:27:30"
+    },
+    {
+        "number": 99,
+        "available_bike_stands": 1,
+        "available_bikes": 28,
+        "last_update": "Tue, 11 Feb 2020 12:31:34"
+    },
+    {
+        "number": 9,
+        "available_bike_stands": 0,
+        "available_bikes": 24,
+        "last_update": "Tue, 11 Feb 2020 12:33:58"
+    },
+    {
+        "number": 67,
+        "available_bike_stands": 20,
+        "available_bikes": 20,
+        "last_update": "Tue, 11 Feb 2020 12:33:17"
+    },
+    {
+        "number": 55,
+        "available_bike_stands": 3,
+        "available_bikes": 33,
+        "last_update": "Tue, 11 Feb 2020 12:32:03"
+    },
+    {
+        "number": 62,
+        "available_bike_stands": 5,
+        "available_bikes": 35,
+        "last_update": "Tue, 11 Feb 2020 12:30:20"
+    },
+    {
+        "number": 5,
+        "available_bike_stands": 35,
+        "available_bikes": 5,
+        "last_update": "Tue, 11 Feb 2020 12:25:22"
+    },
+    {
+        "number": 97,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:33:35"
+    },
+    {
+        "number": 61,
+        "available_bike_stands": 25,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:27:20"
+    },
+    {
+        "number": 77,
+        "available_bike_stands": 26,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:34:08"
+    },
+    {
+        "number": 73,
+        "available_bike_stands": 27,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:29:29"
+    },
+    {
+        "number": 4,
+        "available_bike_stands": 15,
+        "available_bikes": 5,
+        "last_update": "Tue, 11 Feb 2020 12:30:21"
+    },
+    {
+        "number": 49,
+        "available_bike_stands": 14,
+        "available_bikes": 26,
+        "last_update": "Tue, 11 Feb 2020 12:33:46"
+    },
+    {
+        "number": 19,
+        "available_bike_stands": 12,
+        "available_bikes": 18,
+        "last_update": "Tue, 11 Feb 2020 12:34:49"
+    },
+    {
+        "number": 7,
+        "available_bike_stands": 13,
+        "available_bikes": 16,
+        "last_update": "Tue, 11 Feb 2020 12:28:15"
+    },
+    {
+        "number": 102,
+        "available_bike_stands": 23,
+        "available_bikes": 16,
+        "last_update": "Tue, 11 Feb 2020 12:26:07"
+    },
+    {
+        "number": 38,
+        "available_bike_stands": 38,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:29:03"
+    },
+    {
+        "number": 53,
+        "available_bike_stands": 17,
+        "available_bikes": 23,
+        "last_update": "Tue, 11 Feb 2020 12:33:00"
+    },
+    {
+        "number": 58,
+        "available_bike_stands": 0,
+        "available_bikes": 38,
+        "last_update": "Tue, 11 Feb 2020 12:26:20"
+    },
+    {
+        "number": 66,
+        "available_bike_stands": 17,
+        "available_bikes": 23,
+        "last_update": "Tue, 11 Feb 2020 12:34:50"
+    },
+    {
+        "number": 104,
+        "available_bike_stands": 27,
+        "available_bikes": 13,
+        "last_update": "Tue, 11 Feb 2020 12:34:07"
+    },
+    {
+        "number": 101,
+        "available_bike_stands": 30,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:27:23"
+    },
+    {
+        "number": 115,
+        "available_bike_stands": 29,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:34:55"
+    },
+    {
+        "number": 47,
+        "available_bike_stands": 9,
+        "available_bikes": 30,
+        "last_update": "Tue, 11 Feb 2020 12:27:05"
+    },
+    {
+        "number": 117,
+        "available_bike_stands": 0,
+        "available_bikes": 38,
+        "last_update": "Tue, 11 Feb 2020 12:27:07"
+    },
+    {
+        "number": 8,
+        "available_bike_stands": 30,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:28:51"
+    },
+    {
+        "number": 27,
+        "available_bike_stands": 5,
+        "available_bikes": 15,
+        "last_update": "Tue, 11 Feb 2020 12:25:57"
+    },
+    {
+        "number": 16,
+        "available_bike_stands": 20,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:27:57"
+    },
+    {
+        "number": 96,
+        "available_bike_stands": 27,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:29:04"
+    },
+    {
+        "number": 82,
+        "available_bike_stands": 22,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:28:40"
+    },
+    {
+        "number": 76,
+        "available_bike_stands": 5,
+        "available_bikes": 33,
+        "last_update": "Tue, 11 Feb 2020 12:29:34"
+    },
+    {
+        "number": 71,
+        "available_bike_stands": 38,
+        "available_bikes": 2,
+        "last_update": "Tue, 11 Feb 2020 12:33:24"
+    },
+    {
+        "number": 79,
+        "available_bike_stands": 25,
+        "available_bikes": 2,
+        "last_update": "Tue, 11 Feb 2020 12:28:09"
+    },
+    {
+        "number": 69,
+        "available_bike_stands": 1,
+        "available_bikes": 38,
+        "last_update": "Tue, 11 Feb 2020 12:34:34"
+    },
+    {
+        "number": 25,
+        "available_bike_stands": 0,
+        "available_bikes": 28,
+        "last_update": "Tue, 11 Feb 2020 12:33:34"
+    },
+    {
+        "number": 51,
+        "available_bike_stands": 29,
+        "available_bikes": 11,
+        "last_update": "Tue, 11 Feb 2020 12:34:20"
+    },
+    {
+        "number": 37,
+        "available_bike_stands": 19,
+        "available_bikes": 11,
+        "last_update": "Tue, 11 Feb 2020 12:29:49"
+    },
+    {
+        "number": 59,
+        "available_bike_stands": 20,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:28:48"
+    },
+    {
+        "number": 95,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:30:42"
+    },
+    {
+        "number": 94,
+        "available_bike_stands": 24,
+        "available_bikes": 16,
+        "last_update": "Tue, 11 Feb 2020 12:33:32"
+    },
+    {
+        "number": 105,
+        "available_bike_stands": 35,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:31:03"
+    },
+    {
+        "number": 36,
+        "available_bike_stands": 5,
+        "available_bikes": 35,
+        "last_update": "Tue, 11 Feb 2020 12:30:59"
+    },
+    {
+        "number": 93,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:29:57"
+    },
+    {
+        "number": 22,
+        "available_bike_stands": 11,
+        "available_bikes": 9,
+        "last_update": "Tue, 11 Feb 2020 12:34:33"
+    },
+    {
+        "number": 50,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:31:32"
+    },
+    {
+        "number": 110,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:31:14"
+    },
+    {
+        "number": 12,
+        "available_bike_stands": 7,
+        "available_bikes": 13,
+        "last_update": "Tue, 11 Feb 2020 12:32:05"
+    },
+    {
+        "number": 34,
+        "available_bike_stands": 20,
+        "available_bikes": 10,
+        "last_update": "Tue, 11 Feb 2020 12:32:16"
+    },
+    {
+        "number": 78,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:27:41"
+    },
+    {
+        "number": 2,
+        "available_bike_stands": 20,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:30:23"
+    },
+    {
+        "number": 75,
+        "available_bike_stands": 39,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:32:01"
+    },
+    {
+        "number": 111,
+        "available_bike_stands": 26,
+        "available_bikes": 14,
+        "last_update": "Tue, 11 Feb 2020 12:29:11"
+    },
+    {
+        "number": 26,
+        "available_bike_stands": 0,
+        "available_bikes": 20,
+        "last_update": "Tue, 11 Feb 2020 12:33:04"
+    },
+    {
+        "number": 65,
+        "available_bike_stands": 9,
+        "available_bikes": 31,
+        "last_update": "Tue, 11 Feb 2020 12:33:10"
+    },
+    {
+        "number": 15,
+        "available_bike_stands": 16,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:32:24"
+    },
+    {
+        "number": 86,
+        "available_bike_stands": 36,
+        "available_bikes": 2,
+        "last_update": "Tue, 11 Feb 2020 12:31:21"
+    },
+    {
+        "number": 10,
+        "available_bike_stands": 5,
+        "available_bikes": 11,
+        "last_update": "Tue, 11 Feb 2020 12:30:54"
+    },
+    {
+        "number": 100,
+        "available_bike_stands": 23,
+        "available_bikes": 2,
+        "last_update": "Tue, 11 Feb 2020 12:32:47"
+    },
+    {
+        "number": 24,
+        "available_bike_stands": 18,
+        "available_bikes": 2,
+        "last_update": "Tue, 11 Feb 2020 12:34:37"
+    },
+    {
+        "number": 64,
+        "available_bike_stands": 30,
+        "available_bikes": 9,
+        "last_update": "Tue, 11 Feb 2020 12:34:54"
+    },
+    {
+        "number": 109,
+        "available_bike_stands": 28,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:29:42"
+    },
+    {
+        "number": 85,
+        "available_bike_stands": 35,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:33:09"
+    },
+    {
+        "number": 107,
+        "available_bike_stands": 21,
+        "available_bikes": 19,
+        "last_update": "Tue, 11 Feb 2020 12:31:04"
+    },
+    {
+        "number": 33,
+        "available_bike_stands": 8,
+        "available_bikes": 14,
+        "last_update": "Tue, 11 Feb 2020 12:34:11"
+    },
+    {
+        "number": 44,
+        "available_bike_stands": 26,
+        "available_bikes": 4,
+        "last_update": "Tue, 11 Feb 2020 12:34:25"
+    },
+    {
+        "number": 89,
+        "available_bike_stands": 17,
+        "available_bikes": 23,
+        "last_update": "Tue, 11 Feb 2020 12:26:52"
+    },
+    {
+        "number": 57,
+        "available_bike_stands": 0,
+        "available_bikes": 23,
+        "last_update": "Tue, 11 Feb 2020 12:33:03"
+    },
+    {
+        "number": 80,
+        "available_bike_stands": 31,
+        "available_bikes": 9,
+        "last_update": "Tue, 11 Feb 2020 12:30:02"
+    },
+    {
+        "number": 41,
+        "available_bike_stands": 15,
+        "available_bikes": 4,
+        "last_update": "Tue, 11 Feb 2020 12:31:18"
+    },
+    {
+        "number": 3,
+        "available_bike_stands": 19,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:29:00"
+    },
+    {
+        "number": 40,
+        "available_bike_stands": 17,
+        "available_bikes": 4,
+        "last_update": "Tue, 11 Feb 2020 12:26:26"
+    },
+    {
+        "number": 29,
+        "available_bike_stands": 22,
+        "available_bikes": 6,
+        "last_update": "Tue, 11 Feb 2020 12:29:35"
+    },
+    {
+        "number": 103,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:27:52"
+    },
+    {
+        "number": 28,
+        "available_bike_stands": 23,
+        "available_bikes": 7,
+        "last_update": "Tue, 11 Feb 2020 12:32:31"
+    },
+    {
+        "number": 39,
+        "available_bike_stands": 17,
+        "available_bikes": 3,
+        "last_update": "Tue, 11 Feb 2020 12:34:50"
+    },
+    {
+        "number": 83,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:34:03"
+    },
+    {
+        "number": 92,
+        "available_bike_stands": 40,
+        "available_bikes": 0,
+        "last_update": "Tue, 11 Feb 2020 12:31:35"
+    },
+    {
+        "number": 21,
+        "available_bike_stands": 0,
+        "available_bikes": 29,
+        "last_update": "Tue, 11 Feb 2020 12:29:17"
+    },
+    {
+        "number": 88,
+        "available_bike_stands": 29,
+        "available_bikes": 1,
+        "last_update": "Tue, 11 Feb 2020 12:28:04"
+    }
+]
