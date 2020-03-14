@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-IE" lang="en-IE">
+
+<head>
+    
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+    
+    
+<!--
+    <link rel="stylesheet" type="text/css" href="main.css">
+    
+    <script type="text/javascript" src="main.js"></script> 
+-->
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <title>Station map / All Stations / Dublin - Dublinbikes</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta http-equiv="Content-language" content="en-IE" />
+
+    <meta name="author" content="JCDecaux" />
+
+    <meta name="copyright" content="JCDecaux" />
+
+    <meta name="description" content="" />
+
+    <meta name="keywords" content="bike, bikes, JCDecaux" />
+
+    <meta name="MSSmartTagsPreventParsing" content="TRUE" />
+
+    <meta name="generator" content="Version: 6.18.9 - 20/05/2019 13:01" />
+
+    <link rel="Home" href="/" title="Dublinbikes front page" />
+
+    <link rel="Index" href="/" />
+
+    <link rel="Top"  href="/" title="Dublinbikes" />
+
+
+</head>
+    <body>
+        <div id="page">
+            <!--Header -->
+            <div id="header">
+                <img src="My-Post-6.jpg" title="" alt="" />
+            </div>
+            <!--Fin Header -->
+            
+            <div class="breaker"></div>
+            
+            <!--Navigation horizontale -->
+            <div id="headernav">
+                <ul class="nav_principale">
+                    <li class="first"><a href=/ title="Home">Home</a></li>
+                    <li><a href=/Stations title="Stations">Stations</a></li>
+                    <li><a href=/Safety title="Safety">Safety</a></li>
+                </ul>
+                <!--[if !IE]> <-->  <br clear="left" /><!--> <![endif]-->
+            </div>
+            <!--Fin Navigation horizontale -->
+            
+            <div class="breaker"></div>                        
+            
+            <div id="contener">
+            <!--Contenu centre -->
+                <div id="Contenu_centre">
+                    <div id="article">
+                        
+                        <div class="breaker"></div>
+
+                        <div class="txt_riche border_color_article">
+                            <div id="map"></div>
+                            
+                            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFfQele6SPurbIljoHv4tVF5USA_7y1-o&callback=initMap"></script>
+                            
+                            <div class="RowA">
+                                <div class="ColumnA">
+                                    <h4 class="titr_recherche">Select a station below for more information</h4>
+                                    <select id="zones" class="dropdowns" onchange="checkAlert(event)">
+                                                <option>St. Stephens Green</option>
+                                                <option>Bord Gais</option>
+                                                <option>Guiness Storehouse</option>
+                                                <option>The Spire</option>
+                                    </select><br>
+                                    <select id="cat"></select>
+                                </div>
+                                <div class="ColumnA">
+                                    <h4 class="titr_recherche">Daily Occupancy Statistics</h4>
+                                    <h5 class="titr_recherche">Average Fraction Available Bikes per day</h4>
+                                </div>
+                                <div class="ColumnA">
+                                    <h4 class="titr_recherche">Hourly Occupancy Statistics</h4>
+                                    <h5 class="titr_recherche">Average Fraction Available Bikes per hour per day</h4>
+                                </div>
+                            </div>
+                        
+                            <div class="breaker"></div>
+                        
+                        </div>
+                        <div class="bas_article"></div>
+                    </div>
+                </div>
+            <!--Fin Contenu centre -->
+            </div>
+            
+            <!--            stack overflow-->
+            <div class="Row">
+                
+                <div class="Column">
+                    <div id="station">
+                        <div class="cont_blc_station">
+                            <div class="cont_fond_dynamq">
+                                <h3><span>Journey planner</span></h3>
+                                
+                                Start Point: <input type="text" id="start" name="startPoint">
+                                
+                                <br><br>
+                                
+                                End Point: <input type="text" id="end" name="endPoint" >
+                                <input type="button" value="submit" onclick="calcRoute()">
+                                
+                                <div id ="result"></div>
+                                
+                                <div class="breaker"></div>
+                            
+                            </div>
+                        </div>
+                        <div class="bas_cont_blc_station"></div>
+                    </div>
+                    <div class="bas_station"></div>
+                </div>
+
+                
+                <div class="Column2">
+                    <div id="station2">
+                        <div class="cont_blc_station2">
+                            <div class="cont_fond_dynamq2">
+                                <h3><span>Legend</span></h3>
+                                <p>St. Stephen's Green<br>
+                                    <img  src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" width="22" height="22"  style="border: 0px  ;" alt="green" title="green"/>
+                                <p>Bord Gais<br>
+                                    <img  src="http://maps.google.com/mapfiles/ms/icons/pink-dot.png" width="22" height="22"  style="border: 0px  ;" alt="pink" title="pink"/>
+                                </p>
+                                <p>Guiness Storehouse<br>
+                                    <img  src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png" width="22" height="22"  style="border: 0px  ;" alt="yellow" title="yellow"/>
+                                </p>
+                                <p>The Spire<br>
+                                    <img  src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png" width="22" height="22"  style="border: 0px  ;" alt="blue" title="blue"/>
+                                </p>
+                                <p>
+                                    <i class="material-icons" style="color:blue">directions_bike</i> 
+                                    <input type="button" value="on" onclick="traffic(1)">	
+                                    <input type="button" value="off" onclick="traffic(2)">
+                                </p>
+								<p>
+                                    <i class="material-icons" style="color:blue">traffic</i> 
+                                    <input type="button" value="on" onclick="traffic(3)">	
+                                    <input type="button" value="off" onclick="traffic(4)">
+                                </p>
+                                
+                                <div class="breaker"></div>
+                            
+                            </div>
+                        </div>
+                        <div class="bas_cont_blc_station2"></div>
+                    </div>
+                    <div class="bas_station2"></div>
+                </div>
+                
+                <div class="Column3">
+                    <div class="arrondi_color bloc_recherche">
+                        <span class="top">&nbsp;
+                            <span class="b1">&nbsp;</span>
+                            <span class="b2">&nbsp;</span>
+                            <span class="b3">&nbsp;</span>
+                            <span class="b4">&nbsp;</span>
+                        </span>
+                        <div class="boxcontent">
+<!--                            put the weather widget here-->
+                            <h3 class="titr_rech_gauche">Weather goes here:</h3>
+                            <div class="cont_blc_recherche res_rech" id="stationDetails"></div>
+                            <div class="bas_cont_blc_recherche">
+                            </div>
+                            <div class="forml_rech pad_form_search">
+                            </div>
+                            <div class="breaker"></div>
+
+                        </div>
+                        <span class="bottom">
+                            <span class="b4b">&nbsp;</span>
+                            <span class="b3b">&nbsp;</span>
+                            <span class="b2b">&nbsp;</span>
+                            <span class="b1b">&nbsp;</span>
+                        </span>
+                    </div>
+                    
+                    <div class="breaker"></div>
+                
+                </div>
+            </div>
+            <!--            stack overflow-->
+            <!-- footer -->
+            <div id="footer">
+                <ul>
+                    <li><a href="/" title="Home">Home</a></li>
+                    <li>|&nbsp;<a href="/Stations" title="Stations">Stations</a></li>
+                    <li>|&nbsp;<a href="/Safety" title="Safety">Safety</a></li>
+                </ul>
+                
+                <div class="breaker"></div>
+                
+                <div class="sd_list">
+                    <ul>
+                        <li>Copyright: </li>
+                        <li><a href="http://www.jcdecaux.ie/" target="_self">JCDecaux.ie </a></li>
+                        <li><a href="/Legal-disclaimer" target="_self">Legal Disclaimer</a></li>
+                        <li><a href="http://www.dublinbikes.ie/content/download/28425/155414/version/1/file/Cookies+policy+jcdecaux.ie_Final_May+2018.pdf" target="_self">Privacy Policy</a></li>
+                        <li><a href="http://www.dublincity.ie/" target="_self">www.dublincity.ie</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Fin footer -->
+    </div>
+ 
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+    
+        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script> 
+
+    </body>
+    
+</html>
