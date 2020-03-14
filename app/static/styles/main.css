@@ -141,7 +141,7 @@ body,button
     border-width: thick;
     border-color: 6a9eae;
     display: table-cell;
-    background-color: red; /*Optional*/
+    background-color: #fff; /*Optional*/
 }
 .Column2 {
     border-style: solid;
@@ -149,7 +149,7 @@ body,button
     border-color: 6a9eae;
     display: table-cell;
     width: 11%;
-    background-color: red; /*Optional*/
+    background-color: #fff; /*Optional*/
 }
 .Column3 {
     border-radius: 25px;
