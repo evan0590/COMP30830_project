@@ -404,6 +404,57 @@ function traffic(x) {
 	initMap(x);
 }
 
+
+liveweather=[];
+const list = document.querySelector(".ajax-section .cities");
+
+//Put function inside add listener to populate dropdown.
+function loadWeather(){
+    console.log(list);
+
+	$.getJSON('http://127.0.0.1:5000/weather', function(data, status, xhr){
+		for (var i = 0; i < data.length; i++ ) {
+			liveweather[i]=[String(data[i].description), String(data[i].icon), data[i].temp,
+			data[i].tempMin,data[i].tempMax];
+		console.log(liveweather)
+
+		const description = liveweather[0][0];
+		const icon = `https://openweathermap.org/img/wn/${liveweather[0][1]}@2x.png`
+		const temp = liveweather[0][2];
+		const tempMin = liveweather[0][3];
+		const tempMax = liveweather[0][4];
+		console.log(icon);
+
+		const li = document.createElement("li");
+          console.log(li)
+        li.getElementsByClassName("weatherList");
+        const markup = `
+           <div class="city-temp" style="font-size:30px; padding:0 10px 0 10px;">Current temperature: ${temp}<sup>°C</sup></div>
+
+           <div class="city-temp" style="font-size:20px; padding:0 10px 0 10px;">Minimum temperature: ${tempMin}<sup>°C</sup></div>
+
+           <div class="city-temp" style="font-size:20px; padding:0 10px 0 10px;">Max temperature: ${tempMax}<sup>°C</sup></div>
+
+        <figure>
+          <img class="city-icon" src=${icon} alt=${liveweather[0][1]}>
+          <figcaption style="font-size:30px; padding:0 10px 0 10px;">${description}</figcaption>
+        </figure>
+      `;
+        console.log(markup)
+        li.innerHTML = markup;
+        console.log(list)
+    list.appendChild(li);
+        }
+		});
+};
+
+
+loadWeather(); //put this in for addlistener to update
+
+console.log(liveweather);
+
+
+
 function checkAlert(evt) {
   
         if (evt.target.value === "St. Stephens Green") {

@@ -4,6 +4,8 @@ from flask import jsonify
 from app.models import static_bike_data
 from app.models import live_bike_data
 from app.models import bike_schema
+from app.models import live_weather_data
+from app.models import weather_schema
 from datetime import date
 from sqlalchemy import desc
 
@@ -17,7 +19,14 @@ def test_json():
     bikes = live_bike_data.query.filter(live_bike_data.date==today).order_by(desc(live_bike_data.time)).group_by(live_bike_data.ID).all()
     # Serialize the queryset
     result = bike_schema.dump(bikes)
-    return jsonify(result) 
+    return jsonify(result)
+
+@application.route('/weather')
+def weather_json():
+    weather = live_weather_data.query.order_by(live_weather_data.date.desc()).order_by(desc(live_weather_data.time)).limit(1).all()
+    # Serialize the queryset
+    result = weather_schema.dump(weather)
+    return jsonify(result)
 
 @application.route('/homepage')
 def test():

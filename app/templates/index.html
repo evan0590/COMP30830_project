@@ -179,17 +179,22 @@
                             <span class="b3">&nbsp;</span>
                             <span class="b4">&nbsp;</span>
                         </span>
+                         <section class="ajax-section">
                         <div class="boxcontent">
 <!--                            put the weather widget here-->
-                            <h3 class="titr_rech_gauche">Weather goes here:</h3>
+                            <h3 class="titr_rech_gauche">Weather
+                            </h3>
+                            <ul class="cities">
+                                <li class="weatherList"></li>
+                            </ul>
                             <div class="cont_blc_recherche res_rech" id="stationDetails"></div>
                             <div class="bas_cont_blc_recherche">
                             </div>
                             <div class="forml_rech pad_form_search">
                             </div>
                             <div class="breaker"></div>
-
                         </div>
+                        </section>
                         <span class="bottom">
                             <span class="b4b">&nbsp;</span>
                             <span class="b3b">&nbsp;</span>
@@ -225,10 +230,10 @@
             </div>
             <!-- Fin footer -->
     </div>
- 
+
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
-    
-        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script> 
+
+        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
     </body>
     
