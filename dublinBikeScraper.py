@@ -36,7 +36,7 @@ try:
 		status = parsed[x]["status"]
 		#pushes data to SQL table on database
 		try:
-			cursor.execute("INSERT INTO live_bike_data (ID, availableBikeStands,availableBikes,date,time,day,status) VALUES (%s,%s,%s,%s,%s,%s,%s)",(number,availableBikeStands,availableBikes,dateUpdate,timeUpdate,dayUpdate,status))
+			cursor.execute("INSERT INTO live_bike_data (ID, availableBikeStands,availableBikes,date,time,day,status,epoch) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(number,availableBikeStands,availableBikes,dateUpdate,timeUpdate,dayUpdate,status,epoch))
 			conn.commit()
 		except:
 			pass
