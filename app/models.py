@@ -63,17 +63,22 @@ class live_weather_data(db.Model):
     description = db.Column(db.String(80), primary_key=True)
     icon = db.Column(db.String(80), primary_key=True)
     temp = db.Column(db.Float, primary_key=True)
-    tempMin = db.Column(db.Float, primary_key=True)
-    tempMax = db.Column(db.Float, primary_key=True)
+    tempFeels = db.Column(db.Float, primary_key=True)
+    windSpeed = db.Column(db.Float, primary_key=True)
+    humidity = db.Column(db.Float, primary_key=True)
+    pressure = db.Column(db.Float, primary_key=True)
     date = db.Column(db.DateTime(), primary_key=True)
     time = db.Column(db.TIME, primary_key=True)
 
-    def __init__(self, description, icon, temp, tempMin, tempMax, date, time):
+    def __init__(self, description, icon, temp, tempFeels, windSpeed,
+                 humidity, pressure, date, time):
         self.description = description
         self.icon = icon
         self.temp = temp
-        self.tempMin = tempMin
-        self.tempMax = tempMax
+        self.tempFeels = tempFeels
+        self.windSpeed = windSpeed
+        self.humidity = humidity
+        self.pressure = pressure
         self.date = date
         self.time = time
 
@@ -82,15 +87,18 @@ class weatherSchema(Schema):
     description = fields.Str()
     icon = fields.Str()
     temp = fields.Float(dump_only=True)
-    tempMin = fields.Float(dump_only=True)
-    tempMax = fields.Float(dump_only=True)
+    tempFeels = fields.Float(dump_only=True)
+    windSpeed = fields.Float(dump_only=True)
+    humidity = fields.Float(dump_only=True)
+    pressure = fields.Float(dump_only=True)
     date = fields.Date(dump_only=True)
     time = fields.Time(dump_only=True)
     formatted_name = fields.Method("format_name", dump_only=True)
 
     def format_name(self, live_weather_data):
         return "{}, {}".format(live_weather_data.description, live_weather_data.icon,
-                               live_weather_data.temp, live_weather_data.tempMin, live_weather_data.tempMax,
+                               live_weather_data.temp, live_weather_data.tempFeels, live_weather_data.windSpeed,
+                               live_weather_data.humidity, live_weather_data.pressure,
                                live_weather_data.date, live_weather_data.time)
 
 

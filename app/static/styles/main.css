@@ -118,9 +118,9 @@ body,button
 .NewColumn {
     border-style: solid;
     border-width: thick;
-    border-color: #404040;
+    border-color: #fff;
     display: table-cell;
-    background-color: #868686; /*Optional*/
+    background-color: #fff; /*Optional*/
     overflow: hidden;
 }
 /*New undermap!*/
@@ -128,7 +128,7 @@ body,button
 /*Journey planner*/
 #station
 {
-    background:#868686;
+    background:#fff;
     padding:18px 10px 10px 10px;
     overflow: hidden;
 }
@@ -144,7 +144,7 @@ body,button
 {
     border-style: solid;
     border-width: thin;
-    border-color: #404040;
+    border-color: #fff;
     height:auto;
     min-height: 200px; 
 }
@@ -207,18 +207,26 @@ body,button
 .ColumnWeathera {
     display: table-cell;
     background-color: #fff;
-    font-size: 135%;/*Optional*/
+    font-size: 165%;/*Optional*/
     padding: 10px 0px 0px 10px;
     overflow: hidden;
 }
+.ColumnWeathera h5 {
+    margin-top: -10px;
+    font-size: 265%;
+}
+.ColumnWeathera p {
+    font-size: 65%;
+}
 .weather_desc {
-    text-align: center;
-    vertical-align: bottom;
+    vertical-align: top;
     float: right;
+    margin-top: -60px;
 }
 .city-icon {
-    float: right;
     vertical-align: top;
+    float: right;
+    margin-top: -160px;
     padding: 0 0 0 0;align-content: center;
 }
 /*Weather*/
