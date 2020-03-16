@@ -11,7 +11,8 @@
     
     <script type="text/javascript" src="main.js"></script> 
 -->
-    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -73,138 +74,125 @@
                         <div class="breaker"></div>
 
                         <div class="txt_riche border_color_article">
+                            
                             <div id="map"></div>
                             
                             <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFfQele6SPurbIljoHv4tVF5USA_7y1-o&callback=initMap"></script>
-                            
-                            <div class="RowA">
-                                <div class="ColumnA">
-                                    <h4 class="titr_recherche">Select a station below for more information</h4>
-                                    <select id="zones" class="dropdowns" onchange="checkAlert(event)">
-                                                <option>St. Stephens Green</option>
-                                                <option>Bord Gais</option>
-                                                <option>Guiness Storehouse</option>
-                                                <option>The Spire</option>
-                                    </select><br>
-                                    <select id="cat"></select>
+  
+                            <div class="NewRow">                           
+                                <div class="NewColumn" style="width: 20%">
+                                    <div id="station">
+                                        <div class="cont_blc_station">
+                                            <div class="cont_fond_dynamq">
+                                                <h3><span>Legend</span></h3>
+                                                <div class="LegendRow">
+                                                    <div class="TextColumn"><p>St. Stephen's Green<br></div>
+                                                    <div class="IconColumn"><img class="icons" src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" width="22" height="22"  style="border:0px;" alt="green" title="green"/></div>
+                                                </div>
+                                                <div class="LegendRow">
+                                                    <div class="TextColumn"><p>Bord Gais<br></div>
+                                                    <div class="IconColumn"><img  src="http://maps.google.com/mapfiles/ms/icons/pink-dot.png" width="22" height="22"  style="border:0px;" alt="pink" title="pink"/></div>
+                                                </div>
+                                                <div class="LegendRow">
+                                                    <div class="TextColumn"><p>Guiness Storehouse<br></div>
+                                                    <div class="IconColumn"><img src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png" width="22" height="22"  style="border:0px;" alt="yellow" title="yellow"/></div>
+                                                </div>
+                                                <div class="LegendRow">
+                                                    <div class="TextColumn"><p>The Spire<br></div>
+                                                    <div class="IconColumn"><img  src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png" width="22" height="22"  style="border:0px;" alt="blue" title="blue"/></div>
+                                                </div>
+                                                <div class="LegendRow">
+                                                    <div class="TextColumnB">
+                                                        <p>
+                                                            <i class="material-icons" style="color:blue">directions_bike</i><br>
+                                                        </p>
+                                                    </div>
+                                                    <div class="IconColumnB">
+                                                        <p>
+                                                            <input type="button" value="on" onclick="traffic(1)">	
+                                                            <input type="button" value="off" onclick="traffic(2)">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="LegendRow">
+                                                    <div class="TextColumnB">
+                                                        <p>
+                                                            <i class="material-icons" style="color:blue">traffic</i><br>
+                                                        </p>
+                                                    </div>
+                                                    <div class="IconColumnB">
+                                                        <p>
+                                                            <input type="button" value="on" onclick="traffic(3)">	
+                                                            <input type="button" value="off" onclick="traffic(4)">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>    
                                 </div>
-                                <div class="ColumnA">
-                                    <h4 class="titr_recherche">Daily Occupancy Statistics</h4>
-                                    <h5 class="titr_recherche">Average Fraction Available Bikes per day</h4>
+    
+                                <div class="NewColumn">
+                                <div id="station">
+                                        <div class="cont_blc_station">
+                                            <div class="cont_fond_dynamq">
+                                                <h3><span>Journey planner</span></h3>
+                                                Start Point: <input type="text" id="start" name="startPoint">
+                                                <br><br>
+                                                End Point: <input type="text" id="end" name="endPoint" >
+                                                <input type="button" value="submit" onclick="calcRoute()">
+                                                <div id ="result"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="ColumnA">
-                                    <h4 class="titr_recherche">Hourly Occupancy Statistics</h4>
-                                    <h5 class="titr_recherche">Average Fraction Available Bikes per hour per day</h4>
+   
+                                <div class="NewColumn" style="border-radius: 25px;">
+                                    <div id="station" style="border-radius: 25px;">
+                                        <div class="cont_blc_station">
+                                            <div class="cont_fond_dynamq">
+                                                <section class="ajax-section">
+                                                <ul class="cities">
+                                                    <li class="weatherList"></li>
+                                                </ul>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        
-                            <div class="breaker"></div>
-                        
+                            </div>    
                         </div>
-                        <div class="bas_article"></div>
-                    </div>
-                </div>
-            <!--Fin Contenu centre -->
-            </div>
-            
-            <!--            stack overflow-->
-            <div class="Row">
-                
-                <div class="Column">
-                    <div id="station">
-                        <div class="cont_blc_station">
-                            <div class="cont_fond_dynamq">
-                                <h3><span>Journey planner</span></h3>
-                                
-                                Start Point: <input type="text" id="start" name="startPoint">
-                                
-                                <br><br>
-                                
-                                End Point: <input type="text" id="end" name="endPoint" >
-                                <input type="button" value="submit" onclick="calcRoute()">
-                                
-                                <div id ="result"></div>
-                                
-                                <div class="breaker"></div>
-                            
-                            </div>
-                        </div>
-                        <div class="bas_cont_blc_station"></div>
-                    </div>
-                    <div class="bas_station"></div>
-                </div>
+                        <div class="breaker"></div>
 
-                
-                <div class="Column2">
-                    <div id="station2">
-                        <div class="cont_blc_station2">
-                            <div class="cont_fond_dynamq2">
-                                <h3><span>Legend</span></h3>
-                                <p>St. Stephen's Green<br>
-                                    <img  src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" width="22" height="22"  style="border: 0px  ;" alt="green" title="green"/>
-                                <p>Bord Gais<br>
-                                    <img  src="http://maps.google.com/mapfiles/ms/icons/pink-dot.png" width="22" height="22"  style="border: 0px  ;" alt="pink" title="pink"/>
-                                </p>
-                                <p>Guiness Storehouse<br>
-                                    <img  src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png" width="22" height="22"  style="border: 0px  ;" alt="yellow" title="yellow"/>
-                                </p>
-                                <p>The Spire<br>
-                                    <img  src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png" width="22" height="22"  style="border: 0px  ;" alt="blue" title="blue"/>
-                                </p>
-                                <p>
-                                    <i class="material-icons" style="color:blue">directions_bike</i> 
-                                    <input type="button" value="on" onclick="traffic(1)">	
-                                    <input type="button" value="off" onclick="traffic(2)">
-                                </p>
-								<p>
-                                    <i class="material-icons" style="color:blue">traffic</i> 
-                                    <input type="button" value="on" onclick="traffic(3)">	
-                                    <input type="button" value="off" onclick="traffic(4)">
-                                </p>
-                                
-                                <div class="breaker"></div>
-                            
-                            </div>
-                        </div>
-                        <div class="bas_cont_blc_station2"></div>
-                    </div>
-                    <div class="bas_station2"></div>
-                </div>
-                
-                <div class="Column3">
-                    <div class="arrondi_color bloc_recherche">
-                        <span class="top">&nbsp;
-                            <span class="b1">&nbsp;</span>
-                            <span class="b2">&nbsp;</span>
-                            <span class="b3">&nbsp;</span>
-                            <span class="b4">&nbsp;</span>
-                        </span>
-                         <section class="ajax-section">
-                        <div class="boxcontent">
-<!--                            put the weather widget here-->
-                            <h3 class="titr_rech_gauche">Weather
-                            </h3>
-                            <ul class="cities">
-                                <li class="weatherList"></li>
-                            </ul>
-                            <div class="cont_blc_recherche res_rech" id="stationDetails"></div>
-                            <div class="bas_cont_blc_recherche">
-                            </div>
-                            <div class="forml_rech pad_form_search">
-                            </div>
-                            <div class="breaker"></div>
-                        </div>
-                        </section>
-                        <span class="bottom">
-                            <span class="b4b">&nbsp;</span>
-                            <span class="b3b">&nbsp;</span>
-                            <span class="b2b">&nbsp;</span>
-                            <span class="b1b">&nbsp;</span>
-                        </span>
                     </div>
                     
-                    <div class="breaker"></div>
+                    <div class="bas_article"></div>       
+                </div>    
+            </div>
+            <!--Fin Contenu centre -->
+            
+            <!--            stack overflow-->
+            <div class="Row">    
+                <div class="ColumnA">
+                    <h4 class="titr_recherche">Select a station below for more information</h4>
+                    <select id="zones" class="dropdowns" onchange="checkAlert(event)">
+                        <option>St. Stephens Green</option>
+                        <option>Bord Gais</option>
+                        <option>Guiness Storehouse</option>
+                        <option>The Spire</option>
+                    </select>
+                    <br>
+                    <select id="cat"></select>
+                </div>
                 
+                <div class="ColumnA">
+                    <h4 class="titr_recherche">Daily Occupancy Statistics</h4>
+                    <h5 class="titr_recherche">Average Fraction Available Bikes per day</h5>
+                </div>
+        
+                <div class="ColumnA">
+                    <h4 class="titr_recherche">Hourly Occupancy Statistics</h4>
+                    <h5 class="titr_recherche">Average Fraction Available Bikes per hour per day</h5>
                 </div>
             </div>
             <!--            stack overflow-->
@@ -233,7 +221,7 @@
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
 
-        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/weather.js') }}"></script>
 
     </body>
     

@@ -14,10 +14,10 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,
 {
     font-style:normal;
     font-weight:normal
-}ol,ul
+}ol,ul 
 {
     list-style:none
-}caption,th
+}caption,th 
 {
     text-align:left
 }h1,h2,h3,h4,h5,h6
@@ -27,25 +27,25 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,
 }q:before,q:after
 {
     content:''
-}abbr,acronym
+}abbr,acronym 
 {
     border:0
 }body
 {font:13px arial,helvetica,clean,sans-serif;
     *font-size:small;
     *font:x-small
-}table
+}table 
 {
     font-size:inherit;
     font:100%
-}select,input,textarea
+}select,input,textarea 
 {
     font:99% arial,helvetica,clean,sans-serif
-}pre,code
+}pre,code 
 {
     font:115% monospace;
     *font-size:100%
-}body *
+}body * 
 {
     line-height:1.22em
 }body
@@ -96,7 +96,7 @@ body,button
 
 #header img{float:left}
 
-#Contenu_centre{width:98%; height: 90%; padding:16px 10px 0px 16px;float:left}h3{font-size:165%}h1 {display:none}
+#Contenu_centre{width:98%; padding:16px 10px 0px 16px;float:left}h3{font-size:165%}h1 {display:none}
 
 #page
 #headernav {min-height:39px;height:auto;background:gray}
@@ -107,15 +107,133 @@ body,button
 
 #headernav .nav_principale li a{color:#FFF;font-weight:bold;padding:0 17px 0 12px}
 
-/*Undermap*/
-.RowA {
+/*New undermap!*/
+/*New undermap!*/
+.NewRow {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.NewColumn {
+    border-style: solid;
+    border-width: thick;
+    border-color: #404040;
+    display: table-cell;
+    background-color: #868686; /*Optional*/
+    overflow: hidden;
+}
+/*New undermap!*/
+/*New undermap!*/
+/*Journey planner*/
+#station
+{
+    background:#868686;
+    padding:18px 10px 10px 10px;
+    overflow: hidden;
+}
+.cont_blc_station
+{
+    background:#fff;
+    width:100%;
+    height: auto;
+    padding:0 0 0px 0;
+    overflow: hidden;
+}
+.cont_fond_dynamq
+{
+    border-style: solid;
+    border-width: thin;
+    border-color: #404040;
+    height:auto;
+    min-height: 200px; 
+}
+#station h3
+{
+    color:#286679;
+    font-size:165%;
+    padding:4px 0 2px 9px
+}
+/*Journey planner*/
+/*Legend*/
+.LegendRow {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 1px; /*Optional*/
+}
+.TextColumn {
+    display: table-cell;
+    width: 70%;
+    font-size: 12px;
+    padding: 5px 0 0 5px;
+    float: left;
+    background-color: #fff; /*Optional*/
+}
+.IconColumn {
+    display: table-cell;
+    float: right;
+    width: auto;
+    background-color: #fff; /*Optional*/
+}
+.TextColumnB {
+    display: table-cell;
+    width: 20%;
+    font-size: 12px;
+    padding: 5px 0 0 5px;
+    float: left;
+    background-color: #fff; /*Optional*/
+}
+.IconColumnB {
+    display: table-cell;
+    float: right;
+    text-align: center;
+    width: auto;
+    background-color: #fff;
+    padding: 7px 5px 0 0px;
+}
+/*Legend*/
+/*Weather*/
+.ajax-section .cities {
+/*  grid-template-columns: repeat(1, 1fr);*/
+}
+.ColumnRow {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+    max-height: 100px;
+}
+.ColumnWeathera {
+    display: table-cell;
+    background-color: #fff;
+    font-size: 135%;/*Optional*/
+    padding: 10px 0px 0px 10px;
+    overflow: hidden;
+}
+.weather_desc {
+    text-align: center;
+    vertical-align: bottom;
+    float: right;
+}
+.city-icon {
+    float: right;
+    vertical-align: top;
+    padding: 0 0 0 0;align-content: center;
+}
+/*Weather*/
+
+/*Graphs,etc.*/
+.Row {
     display: table;
     width: 99%; /*Optional*/
-    height: 210px;
+    height:auto;
+    min-height: 200px;
     table-layout: fixed; /*Optional*/
     border-spacing: 10px; /*Optional*/
     padding: 6px 6px 0px 4px;
 }
+
 .ColumnA {
     text-align: center;
     border-style: solid;
@@ -123,122 +241,13 @@ body,button
     border-color: #404040;
     display: table-cell;
     background-color: #fff; /*Optional*/
+    overflow: hidden;
 }
 .dropdowns {
     padding-top: 10px;
+    padding-bottom: 10px;
 }
-/*Undermap*/
-
-/*stack overflow*/
-.Row {
-    display: table;
-    width: 99%; /*Optional*/
-    table-layout: fixed; /*Optional*/
-    border-spacing: 10px; /*Optional*/
-    padding: 6px 6px 0px 4px;
-}
-.Column {
-    border-style: solid;
-    border-width: thick;
-    border-color: #404040;
-    display: table-cell;
-    background-color: #fff; /*Optional*/
-}
-.Column2 {
-    border-style: solid;
-    border-width: thick;
-    border-color: #404040;
-    display: table-cell;
-    width: 11%;
-    background-color: #fff; /*Optional*/
-}
-.Column3 {
-    border-radius: 25px;
-    border-style: solid;
-    border-width: thick;
-    border-color: #404040;
-    display: table-cell;
-    background-color:#404040; /*Optional*/
-}
-/*stack overflow*/
-/*Modelling*/
-#station
-{
-    background:#c1d1d6;
-    padding:14px 10px 11px 10px;
-    height:285px;
-}
-.bas_station
-{
-    background:#c1d1d6;
-    height:8px;
-
-}.cont_blc_station
-{
-    background:#fff;
-    height:100%;
-    width:100%;
-    padding:0 0 5px 0;
-}
-#station .cont_fond_dynamq
-{
-    padding:0;
-    min-height:99px;
-    height:auto;
-}
-
-#station h3
-{
-    color:#286679;
-    font-size:165%;
-    padding:4px 0 2px 9px
-}
-/*Modelling*/
-/*Legend*/
-#station2
-{
-    background:#c1d1d6;
-    padding:14px 10px 11px 10px;
-    height:285px;
-}
-.bas_station2
-{
-    background:#c1d1d6;
-    height:8px;
-}
-.cont_blc_station2
-{
-    background:#fff;
-    height:100%;
-    width:100%;
-    padding:0 0 5px 0;
-}
-#station2 .cont_fond_dynamq2
-{
-    padding:0;
-    min-height:99%;
-    text-align: center;
-    height:auto;
-}
-#station2 h3
-{
-    color:#286679;
-    font-size:165%;
-    padding:4px 0 2px 0px
-}
-/*Legend*/
-/*Weather*/
-h3.titr_rech_gauche
-{
-    padding:1px 0 5px 7px;
-    color:#286679
-}
-.ajax-section .cities {
-  display: grid;
-  grid-gap: 0px 1px;
-/*  grid-template-columns: repeat(1, 1fr);*/
-}
-/*Weather*/
+/*Graphs,etc.*/
 
 #footer{margin-top:30px;padding-bottom:20px;text-align:center}
 #footer ul{text-align:center;font-size:110%;padding-top:10px}
@@ -293,106 +302,12 @@ p.full_size{padding:10px 10px 10px 10px}
     padding:10px;
     border-left:3px solid #404040;
     border-right:3px solid #404040;
-    height:100%;font-size:110%
+    font-size:110%
 }
 .border_color_theme{padding:0 10px 0 10px}
 .border_color_article{padding:0 1px 1px 1px}
 .padborder_color{padding:0 17px}
 
-.arrondi_color
-{
-    background:transparent;
-    width:100%;
-    margin:0 auto
-}
-.arrondi_color
-.top,
-.arrondi_color
-.bottom
-{
-    display:block;
-    background:transparent;
-    font-size:1px
-}
-.arrondi_color .b1, .arrondi_color .b2, .arrondi_color .b3, .arrondi_color .b4, .arrondi_color .b1b, .arrondi_color .b2b, .arrondi_color .b3b, .arrondi_color .b4b
-{
-    display:block;
-    overflow:hidden
-}
-.arrondi_color .b1, .arrondi_color .b2, .arrondi_color .b3,.arrondi_color .b1b, .arrondi_color .b2b, .arrondi_color .b3b
-{
-    height:1px
-}
-.arrondi_color .b2
-{
-    background:#404040;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
-.arrondi_color .b3
-{
-    background:#404040;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
-.arrondi_color .b4
-{
-    background:#404040;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
-.arrondi_color .b4b
-{
-    background:#404040;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
-.arrondi_color .b3b
-{
-    background:#404040;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
-.arrondi_color .b2b
-{
-    background:#404040;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
-.arrondi_color .b1
-{
-    margin:0 5px;
-    background:#404040
-}
-.arrondi_color .b2, .arrondi_color .b2b
-{
-    margin:0 3px;border-width:0 2px
-}
-.arrondi_color .b3, .arrondi_color .b3b
-{
-    margin:0 2px
-}
-.arrondi_color .b4, .arrondi_color .b4b
-{
-    height:2px;
-    margin:0 1px
-}
-.arrondi_color .b1b
-{
-    margin:0 5px;
-    background:#404040
-}
-
-.boxcontent
-{
-    display:block;
-    border-radius: 25px;
-    width: 100%;
-    height: 305px;
-    background:#c1d1d6;
-    border-left:1px solid #404040;
-    border-right:1px solid #404040
-}
 #page
 a{text-decoration:underline;color:#4d8b9e}
 .pagelayout_fullmap {background:transparent}.pagelayout_fullmap
