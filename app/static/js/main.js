@@ -262,9 +262,9 @@ function calcRoute() {
 					});
 				}
 
-				else if ( stations[i][0] == distanceResults[3]){
-					var endLat = stations[i][2]
-					var endLong = stations[i][3]	
+				else if ( stations1[i][0] == distanceResults[3]){
+					var endLat = stations1[i][2]
+					var endLong = stations1[i][3]	
 					waypts.push({
 						location: endLat+","+endLong,
 						stopover: true
@@ -390,7 +390,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 		for (x = 0; x < stations1.length; x++) {  
 			var radlatEnd = Math.PI * endLat/180;
 			var radlatStations = Math.PI * stations1[x][2]/180;
-			var thetaEnd = endLon-stations[x][3];
+			var thetaEnd = endLon-stations1[x][3];
 			var radthetaEnd = Math.PI * thetaEnd/180;
 			var distEnd = Math.sin(radlatEnd) * Math.sin(radlatStations) + Math.cos(radlatEnd) * Math.cos(radlatStations) * Math.cos(radthetaEnd);
 			if (distEnd > 1) {
