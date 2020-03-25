@@ -85,13 +85,28 @@ function initMap(x) {
 			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",scaledSize: new google.maps.Size(30, 30)}})
 			markers.push(marker);
 		}
-
+			
+	function MachineLearning(x){
+		jQuery.ajax ({
+		url: 'http://127.0.0.1:5000/machinelearning',
+		type: "POST",
+		data: JSON.stringify(x),
+		dataType: "json",
+		contentType: "application/json; charset=utf-8",
+		success: function(data, status, xhr){
+			document.getElementById("graph").innerHTML = x;
+			console.log(data);
+		}
+		});
+	};
+		
         // Add on-click function for each station marker, and populate dropdown with live occupancy information from database
 		google.maps.event.addListener(marker, 'click', (function(marker, i){
-			return function() {
+			return function() {	
 			loadliveBike();
 			for (j = 0; j < livebike.length; j++){
 				if(stations[i][0]==livebike[j][0]){
+					MachineLearning(livebike[j][0]);
 					infowindow.setContent('<b>Station: </b>'+stations[i][1]+ '<br><b>Station ID: </b>' + stations[i][0]+'<br><b>Available Stands: </b>'+livebike[j][1]+'<br><b>Available Bikes: </b>'+livebike[j][2]);}}
 			infowindow.close();
 			infowindow.open(map, this);

@@ -1,6 +1,9 @@
 from app import application
 from flask import render_template
 from flask import jsonify
+from flask import request
+import pandas as pd
+import numpy as np
 from app.models import static_bike_data
 from app.models import live_bike_data
 from app.models import staticbike_schema
@@ -49,4 +52,12 @@ def weather_json():
 def test():
     return render_template('index.html')
 
+@application.route('/machinelearning', methods=['POST','GET'])
+def machineLearning():
+	station = request.json
+	filtereddf = live_bike_data.query.filter(live_bike_data.ID == station).limit(5).all() 
+	result = bike_schema.dump(filtereddf)
 
+	df = pd.DataFrame(result)
+
+	return df.to_json()
