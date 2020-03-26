@@ -14,6 +14,9 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"> </script>
+	
+	<!--chart js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
 
@@ -187,14 +190,25 @@
                     <select id="cat"></select>
                 </div>
                 
-                <div class="ColumnA" id="graph">
-                    <h4 class="titr_recherche">Daily Occupancy Statistics</h4>
-                    <h5 class="titr_recherche">Average Fraction Available Bikes per day</h5>
+                <div class="ColumnA">
+					<h4 class="titr_recherche">Average Bikes Available per day</h4>
+					<canvas id="line-chart"></canvas>
                 </div>
         
-                <div class="ColumnA">
-                    <h4 class="titr_recherche">Hourly Occupancy Statistics</h4>
-                    <h5 class="titr_recherche">Average Fraction Available Bikes per hour per day</h5>
+                <div id ="Charting" class="ColumnA">
+					<h4 class="titr_recherche">Average Bikes Available per hour</h4>
+					<div id="dayDropdown" style="display: none;">
+						<select id="days" onchange="lineGraphHours(this.value);">
+							<option value="Monday">Monday</option>
+							<option value="Tuesday">Tuesday</option>
+							<option value="Wednesday">Wednesday</option>
+							<option value="Thursday">Thursday</option>
+							<option value="Friday">Friday</option>
+							<option value="Saturday">Saturday</option>
+							<option value="Sunday">Sunday</option>
+						</select>
+					</div>	
+					<canvas id="line-chart-hours"></canvas>
                 </div>
             </div>
             <!--            stack overflow-->

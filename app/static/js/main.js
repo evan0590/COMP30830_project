@@ -1,11 +1,51 @@
-	// next 4 variables allocating stations to different regions on map.
-	var stephensGreen = [5,6,9,10,11,13,17,18,19,26,27,34,36,37,39,41,43,47,51,52,53,54,55,71,89,98,113,114];
-	var bordGais = [8,16,21,22,23,25,32,48,49,56,57,58,62,63,64,65,66,67,68,69,90,91,99,117];
-	var guinessStorehouse = [7,42,50,72,73,74,75,76,80,81,82,83,84,85,86,87,88,92,93,94,95,96,97,100];
-	var spire = [2,3,4,12,15,24,28,29,30,31,33,38,40,44,45,59,61,77,78,79,101,102,103,104,105,106,107,108,
-	109,110,111,112,115];
+// next 4 variables allocating stations to different regions on map.
+var stephensGreen = [5,6,9,10,11,13,17,18,19,26,27,34,36,37,39,41,43,47,51,52,53,54,55,71,89,98,113,114];
+var bordGais = [8,16,21,22,23,25,32,48,49,56,57,58,62,63,64,65,66,67,68,69,90,91,99,117];
+var guinessStorehouse = [7,42,50,72,73,74,75,76,80,81,82,83,84,85,86,87,88,92,93,94,95,96,97,100];
+var spire = [2,3,4,12,15,24,28,29,30,31,33,38,40,44,45,59,61,77,78,79,101,102,103,104,105,106,107,108,
+109,110,111,112,115];
 
-	var stations=[];
+var stations=[];
+
+// need two global arrays to store names as when generate first line graph for average days
+// user need to select a day dropdown to call the second graph.
+var stationName;
+var stationID;
+var chartHours;
+var chartDays;
+
+function lineGraphHours(day){
+	if(chartHours!=null){
+        chartHours.destroy();
+    }
+	//post ID to flask and result is graph
+	jQuery.ajax ({
+	url: 'http://127.0.0.1:5000/linegraphhours',
+	type: "POST",
+	data: JSON.stringify([day,stationID]),
+	dataType: "json",
+	contentType: "application/json; charset=utf-8",
+	success: function(data, status, xhr){
+		chartHours = new Chart(document.getElementById("line-chart-hours"), {
+			type: 'line',
+			data: {
+			labels: ["8-9","9-10","10-11","11-12","12-13","13-14","14-15","15-16","16-17","17-18","18-19","19-20","20-21","21-22","22-23","23-00"],
+			datasets: [{ 
+			data: data,
+			label: "Available Bikes",
+			borderColor: "#3e95cd"
+			}]
+			},
+			options: {
+				title: {
+					display: true,
+					text: "Station Name: "+stationName+" ID: "+stationID
+				}	
+			}
+		});
+	}
+	});
+};
 
 function initMap(x) {
 	
@@ -85,17 +125,49 @@ function initMap(x) {
 			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",scaledSize: new google.maps.Size(30, 30)}})
 			markers.push(marker);
 		}
-			
-	function MachineLearning(x){
+					
+	function lineGraphDays(id,name){
+		if(chartDays!=null){
+        	chartDays.destroy();
+    	}
+		// display day dropdown
+		var dayDropdown = document.getElementById("dayDropdown");
+		dayDropdown.style.display = "block";
+		var resetDropdown = document.getElementById("days");
+		resetDropdown.selectedIndex = null;
+		
+		//saves name and ID as global variables
+		stationID = id
+		stationName = name
+
+		//post ID to flask and result is graph
 		jQuery.ajax ({
-		url: 'http://127.0.0.1:5000/machinelearning',
+		url: 'http://127.0.0.1:5000/linegraphdays',
 		type: "POST",
-		data: JSON.stringify(x),
+		data: JSON.stringify(id),
 		dataType: "json",
 		contentType: "application/json; charset=utf-8",
 		success: function(data, status, xhr){
-			document.getElementById("graph").innerHTML = x;
-			console.log(data);
+			// Line Graph
+			chartDays = new Chart(document.getElementById("line-chart"), {
+			  type: 'line',
+			  data: {
+				labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+				datasets: [{ 
+					data: data,
+					label: "Available Bikes",
+					borderColor: "#3e95cd"
+				  }]
+			  },
+			options: {
+				title: {
+				  display: true,
+				  text: "Station Name: "+name+" ID: "+id
+				}
+			  }
+				
+			});
+			lineGraphHours("Monday")
 		}
 		});
 	};
@@ -106,7 +178,7 @@ function initMap(x) {
 			loadliveBike();
 			for (j = 0; j < livebike.length; j++){
 				if(stations[i][0]==livebike[j][0]){
-					MachineLearning(livebike[j][0]);
+					lineGraphDays(stations[i][0],stations[i][1]);
 					infowindow.setContent('<b>Station: </b>'+stations[i][1]+ '<br><b>Station ID: </b>' + stations[i][0]+'<br><b>Available Stands: </b>'+livebike[j][1]+'<br><b>Available Bikes: </b>'+livebike[j][2]);}}
 			infowindow.close();
 			infowindow.open(map, this);
