@@ -92,6 +92,17 @@ function initMap(x) {
 
     loadstaticbike();
     
+    //add in dropdown options for stations
+    function populateDropdown(stations){
+    $.each(stations, function (i, element) {
+    //append station name to dropdown   
+    $('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
+    }
+    )};
+    
+    
+    
+    
     //variable to store live occupancy info
 	var livebike=[];
 
@@ -109,31 +120,18 @@ function initMap(x) {
 	loadliveBike();
     
     
-    //add in dropdown options for stations
-    function populateDropdown(stations){
-    $.each(stations, function (i, element) {
-    //append station name to dropdown   
-    $('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
-    }
-    )};
-    
     //add in live occupancy info under dropdown menu for each station
     function populateInfo(live){
      $('select').on('change', function() {
-          loadliveBike();
-          var store=this.value;
-          console.log(store)
           for (i = 0; i < stations.length; i++) { 
              //search name user selects against static station array
              if (this.value==stations[i][1]){
-                 console.log(this.value)
                  retrieve_static_info.lineGraphDays(stations[i][0],this.value);
                  for (j=0; j<live.length; j++){
                     //find id match from static station array to id in live station info
                     if(stations[i][0]==live[j][0]){
                         var Info=('<br /> <b>Available Bike Stands: </b>'+live[j][1]+ '<br /><br />'+'<b>Available Bikes: </b>'+live[j][2]);
-                        document.getElementById("bikeInfo").innerHTML = Info;
-                        
+                        document.getElementById("bikeInfo").innerHTML = Info;            
                  }}}}
      })};
 
