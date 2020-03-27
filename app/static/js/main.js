@@ -5,7 +5,6 @@ var guinessStorehouse = [7,42,50,72,73,74,75,76,80,81,82,83,84,85,86,87,88,92,93
 var spire = [2,3,4,12,15,24,28,29,30,31,33,38,40,44,45,59,61,77,78,79,101,102,103,104,105,106,107,108,
 109,110,111,112,115];
 
-var stations=[];
 
 // need two global arrays to store names as when generate first line graph for average days
 // user need to select a day dropdown to call the second graph.
@@ -68,20 +67,32 @@ function initMap(x) {
 	else if(x == '3'){
 		trafficLayer.setMap(map);	
 	}
+    
+    
+    //variable to store static station info
+    var stations=[];
+
+    
 	//Function to retrieve static station info from database through flask and push data to above list
     function loadstaticbike(){
 		$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
 			for (var i = 0; i < data.length; i++ ) {
                 //stations.push(data[i]);
 				stations[i]=[data[i].ID, String(data[i].name), data[i].Latitude, data[i].Longtitude];
-            }
-            //As Jquery call is asynchrous call below function to populate map and pass in station info as parameter
+            }   
+            //As Jquery call is asynchronous we need to call below functions now to populate map and pass in station info as parameter, otherwise code may execute out of order
+            
             retrieve_static_info(stations)
+            
+            populateDropdown(stations)    
+            
+
 			});
 	};
 
     loadstaticbike();
-        
+    
+    //variable to store live occupancy info
 	var livebike=[];
 
 	//Function to retrieve live occupancy data from database through flask and push data to above list
@@ -90,10 +101,41 @@ function initMap(x) {
 			for (var i = 0; i < data.length; i++ ) {
 				livebike[i]=[data[i].ID,String(data[i].availableBikeStands), String(data[i].availableBikes)];
 			}
+            
+            populateInfo(livebike);
 			});
 	};
-
+    //run to get initial live information before user queries
 	loadliveBike();
+    
+    
+    //add in dropdown options for stations
+    function populateDropdown(stations){
+    $.each(stations, function (i, element) {
+    //append station name to dropdown   
+    $('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
+    }
+    )};
+    
+    //add in live occupancy info under dropdown menu for each station
+    function populateInfo(live){
+     $('select').on('change', function() {
+          loadliveBike();
+          var store=this.value;
+          console.log(store)
+          for (i = 0; i < stations.length; i++) { 
+             //search name user selects against static station array
+             if (this.value==stations[i][1]){
+                 console.log(this.value)
+                 retrieve_static_info.lineGraphDays(stations[i][0],this.value);
+                 for (j=0; j<live.length; j++){
+                    //find id match from static station array to id in live station info
+                    if(stations[i][0]==live[j][0]){
+                        var Info=('<br /> <b>Available Bike Stands: </b>'+live[j][1]+ '<br /><br />'+'<b>Available Bikes: </b>'+live[j][2]);
+                        document.getElementById("bikeInfo").innerHTML = Info;
+                        
+                 }}}}
+     })};
 
 	var infowindow = new google.maps.InfoWindow()
 
@@ -125,7 +167,9 @@ function initMap(x) {
 			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",scaledSize: new google.maps.Size(30, 30)}})
 			markers.push(marker);
 		}
-					
+				
+         
+        
 	function lineGraphDays(id,name){
 		if(chartDays!=null){
         	chartDays.destroy();
@@ -171,6 +215,9 @@ function initMap(x) {
 		}
 		});
 	};
+        
+       //Access function outside of retrive static info function scope 
+       retrieve_static_info.lineGraphDays=lineGraphDays
 		
         // Add on-click function for each station marker, and populate dropdown with live occupancy information from database
 		google.maps.event.addListener(marker, 'click', (function(marker, i){
@@ -179,7 +226,8 @@ function initMap(x) {
 			for (j = 0; j < livebike.length; j++){
 				if(stations[i][0]==livebike[j][0]){
 					lineGraphDays(stations[i][0],stations[i][1]);
-					infowindow.setContent('<b>Station: </b>'+stations[i][1]+ '<br><b>Station ID: </b>' + stations[i][0]+'<br><b>Available Stands: </b>'+livebike[j][1]+'<br><b>Available Bikes: </b>'+livebike[j][2]);}}
+					infowindow.setContent('<b>Station: </b>'+stations[i][1]+ '<br><b>Station ID: </b>' + stations[i][0]+'<br><b>Available Stands: </b>'+livebike[j][1]+'<br><b>Available Bikes: </b>'+livebike[j][2]);}
+            }                
 			infowindow.close();
 			infowindow.open(map, this);
 			}}
@@ -393,121 +441,3 @@ function traffic(x) {
 	initMap(x);
 }
 
-
-function checkAlert(evt) {
-  
-        if (evt.target.value === "St. Stephens Green") {
-            populateFilters();
-        } else if (evt.target.value === "Bord Gais") {
-            populateGais();
-        } else if (evt.target.value === "Guiness Storehouse") {
-            populateGuiness();
-        } else if (evt.target.value === "The Spire") {
-            populateSpire();
-        }
-        
-
-
-    }
-    
-    var xmlhttp = new XMLHttpRequest();
-    var url='stephensGreen.json';
-    console.log(url);
-    var parsedObja;
-    
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {            
-            parsedObja = JSON.parse(xmlhttp.responseText);
-        }
-    };
-    xmlhttp.open("GET", url, true);                      
-    xmlhttp.send();
-    console.log(parsedObja);
-    
-    function populateFilters() {
-        
-        var selectCategory = document.getElementById("cat")
-   
-        var stephenStations = parsedObja.stephensGreen;
-        var stephensList = []                              
-        console.log(parsedObja);   
-        for (var i = 0; i < stephenStations.length; i++) {
-            stephenStations[i][1];
-            console.log(stephenStations[i][1])
-            stephensList.push(stephenStations[i][1]);
-        }    
-        for(var i = 0; i < stephensList.length; i++) {
-            var station = stephensList[i];     
-            var option = document.createElement("OPTION");
-            selectCategory.options.add(option);
-            option.text = station
-            option.value = station
-            selectCategory.add(option);      
-        }
-    }
-    
-    function populateGais() {
-        
-        var selectCategory = document.getElementById("cat")
-        
-        var gaisStations = parsedObja.bordGais;
-        var gaisList = []
-        
-        for (var i = 0; i < gaisStations.length; i++) {
-            gaisStations[i][1];
-            console.log(gaisStations[i][1])
-            gaisList.push(gaisStations[i][1]);  
-        }
-        for(var i = 0; i < gaisList.length; i++) {
-            var station = gaisList[i];     
-            var option = document.createElement("OPTION");
-            selectCategory.options.add(option);
-            option.text = station
-            option.value = station
-            selectCategory.add(option); 
-        }
-    }
-    
-    function populateGuiness() {
-        
-        var selectCategory = document.getElementById("cat")
-        
-        var guinessStations = parsedObja.guinessStorehouse;
-        var guinessList = []
-        
-        for (var i = 0; i < guinessStations.length; i++) {
-            guinessStations[i][1];
-            console.log(guinessStations[i][1])
-            guinessList.push(guinessStations[i][1]);  
-        }
-        for(var i = 0; i < guinessList.length; i++) {
-            var station = guinessList[i];     
-            var option = document.createElement("OPTION");
-            selectCategory.options.add(option);
-            option.text = station
-            option.value = station
-            selectCategory.add(option); 
-        }
-    }
-    
-    function populateSpire() {
-        
-        var selectCategory = document.getElementById("cat")
-        
-        var spireStations = parsedObja.spire;
-        var spireList = []
-        
-        for (var i = 0; i < spireStations.length; i++) {
-            spireStations[i][1];
-            console.log(spireStations[i][1])
-            spireList.push(spireStations[i][1]);  
-        }
-        for(var i = 0; i < spireList.length; i++) {
-            var station = spireList[i];     
-            var option = document.createElement("OPTION");
-            selectCategory.options.add(option);
-            option.text = station
-            option.value = station
-            selectCategory.add(option); 
-        }
-    }
