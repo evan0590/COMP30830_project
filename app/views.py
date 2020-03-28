@@ -12,7 +12,6 @@ from app.models import live_weather_data
 from app.models import weather_schema
 from datetime import date
 from sqlalchemy import desc
-from sqlalchemy.sql import func
 from app import db
 
 
@@ -53,30 +52,12 @@ def weather_json():
 def test():
     return render_template('index.html')
 
-@application.route('/linegraphdays', methods=['POST','GET'])
-def lineGraphDays():
-    days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
-    dayAverageBikes=[]
-    station = request.json
-    for day in days:
-        filtereddf = db.session.query(db.func.avg(live_bike_data.availableBikes).label('availableBikes')).filter(live_bike_data.ID == station).filter(live_bike_data.day == day).all()
-        for row in filtereddf:
-            average = float(row[0])
-            dayAverageBikes.append(round(average))
+@application.route('/machinelearning', methods=['POST','GET'])
+def machineLearning():
+	station = request.json
+	filtereddf = live_bike_data.query.filter(live_bike_data.ID == station).limit(5).all() 
+	result = bike_schema.dump(filtereddf)
 
-    return jsonify(dayAverageBikes)
+	df = pd.DataFrame(result)
 
-@application.route('/linegraphhours', methods=['POST','GET'])
-def lineGraphHours():
-    time = ["08:00:00","09:00:00","10:00:00","11:00:00","12:00:00","13:00:00","14:00:00","15:00:00","16:00:00","17:00:00","18:00:00","19:00:00","20:00:00","21:00:00","22:00:00","23:00:00","23:59:59"]
-    dayAverageBikes=[]
-    result = request.json
-    day = result[0][:3]
-    stationID = result[1]
-    for x in range(16):
-        filtereddf = db.session.query(db.func.avg(live_bike_data.availableBikes).label('availableBikes')).filter(live_bike_data.ID == stationID).filter(live_bike_data.day == day).filter(live_bike_data.time.between(time[x],time[x+1])).all()
-        for row in filtereddf:
-            average = float(row[0])
-            dayAverageBikes.append(round(average))
-
-    return jsonify(dayAverageBikes)
+	return df.to_json()
