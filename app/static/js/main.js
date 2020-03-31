@@ -12,39 +12,56 @@ var stationName;
 var stationID;
 var chartHours;
 var chartDays;
+var stations=[];
+var livebike=[];
+var locationsArray = []
+var distanceResults = []
 
-function lineGraphHours(day){
-	if(chartHours!=null){
-        chartHours.destroy();
-    }
-	//post ID to flask and result is graph
-	jQuery.ajax ({
-	url: 'http://127.0.0.1:5000/linegraphhours',
-	type: "POST",
-	data: JSON.stringify([day,stationID]),
-	dataType: "json",
-	contentType: "application/json; charset=utf-8",
-	success: function(data, status, xhr){
-		chartHours = new Chart(document.getElementById("line-chart-hours"), {
-			type: 'line',
-			data: {
-			labels: ["8-9","9-10","10-11","11-12","12-13","13-14","14-15","15-16","16-17","17-18","18-19","19-20","20-21","21-22","22-23","23-00"],
-			datasets: [{ 
-			data: data,
-			label: "Available Bikes",
-			borderColor: "#3e95cd"
-			}]
-			},
-			options: {
-				title: {
-					display: true,
-					text: "Station Name: "+stationName+" ID: "+stationID
-				}	
-			}
+function loadstaticbike(){
+	$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
+		for (var i = 0; i < data.length; i++ ) {
+			//stations.push(data[i]);
+			stations[i]=[data[i].ID, String(data[i].name), data[i].Latitude, data[i].Longtitude];
+		}   
+		//As Jquery call is asynchronous we need to call below functions now to populate map and pass in station info as parameter, otherwise code may execute out of order
+
+		populateDropdown(stations)    
 		});
-	}
-	});
 };
+
+function populateDropdown(stations){
+	$.each(stations, function (i, element) {
+	//append station name to dropdown   
+	$('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
+	}
+)};
+
+function loadliveBike(){
+	$.getJSON('http://127.0.0.1:5000/live', function(data, status, xhr){
+		for (var i = 0; i < data.length; i++ ) {
+			livebike[i]=[data[i].ID,String(data[i].availableBikeStands), String(data[i].availableBikes)];
+		}
+
+		populateInfo(livebike);
+        
+        initMap.marker()
+		});
+};
+
+//add in live occupancy info under dropdown menu for each station
+function populateInfo(live){
+ $('select').on('change', function() {
+	  for (i = 0; i < stations.length; i++) { 
+		 //search name user selects against static station array
+		 if (this.value==stations[i][1]){
+			 lineGraphDays(stations[i][0],this.value);
+			 for (j=0; j<live.length; j++){
+				//find id match from static station array to id in live station info
+				if(stations[i][0]==live[j][0]){
+					var Info=('<br /> <b>Available Bike Stands: </b>'+live[j][1]+ '<br /><br />'+'<b>Available Bikes: </b>'+live[j][2]);
+					document.getElementById("bikeInfo").innerHTML = Info;            
+			 }}}}
+ })};
 
 function initMap(x) {
 	
@@ -68,155 +85,58 @@ function initMap(x) {
 		trafficLayer.setMap(map);	
 	}
     
-    
-    //variable to store static station info
-    var stations=[];
-
-    
-	//Function to retrieve static station info from database through flask and push data to above list
-    function loadstaticbike(){
-		$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
-			for (var i = 0; i < data.length; i++ ) {
-                //stations.push(data[i]);
-				stations[i]=[data[i].ID, String(data[i].name), data[i].Latitude, data[i].Longtitude];
-            }   
-            //As Jquery call is asynchronous we need to call below functions now to populate map and pass in station info as parameter, otherwise code may execute out of order
-            
-            retrieve_static_info(stations)
-            
-            populateDropdown(stations)    
-            
-
-			});
-	};
-
     loadstaticbike();
-    
-    //add in dropdown options for stations
-    function populateDropdown(stations){
-    $.each(stations, function (i, element) {
-    //append station name to dropdown   
-    $('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
-    }
-    )};
-    
-    
-    
-    
-    //variable to store live occupancy info
-	var livebike=[];
-
-	//Function to retrieve live occupancy data from database through flask and push data to above list
-	function loadliveBike(){
-		$.getJSON('http://127.0.0.1:5000/live', function(data, status, xhr){
-			for (var i = 0; i < data.length; i++ ) {
-				livebike[i]=[data[i].ID,String(data[i].availableBikeStands), String(data[i].availableBikes)];
-			}
-            
-            populateInfo(livebike);
-			});
-	};
-    //run to get initial live information before user queries
+   	
 	loadliveBike();
-    
-    
-    //add in live occupancy info under dropdown menu for each station
-    function populateInfo(live){
-     $('select').on('change', function() {
-          for (i = 0; i < stations.length; i++) { 
-             //search name user selects against static station array
-             if (this.value==stations[i][1]){
-                 retrieve_static_info.lineGraphDays(stations[i][0],this.value);
-                 for (j=0; j<live.length; j++){
-                    //find id match from static station array to id in live station info
-                    if(stations[i][0]==live[j][0]){
-                        var Info=('<br /> <b>Available Bike Stands: </b>'+live[j][1]+ '<br /><br />'+'<b>Available Bikes: </b>'+live[j][2]);
-                        document.getElementById("bikeInfo").innerHTML = Info;            
-                 }}}}
-     })};
-
+        
 	var infowindow = new google.maps.InfoWindow()
-
+	
+	var sizeX;
+	var sizeY;
+	
 	// 4 for loop iterating through station variables and plotting markers in different
-	// colours
-    function retrieve_static_info(stations){
+    //function to set size of markers depending on number of available bikes at stations
+    //for each station against live bike info
+    //if avail bikes of that station>10
+	function marker(){ 
 	for (i = 0; i < stations.length; i++) {
+		for (x = 0; x < livebike.length; x++){ 
+			if (livebike[x][0] == stations[i][0]){ 
+				if(livebike[x][2] >9){
+					sizeX = 25;
+					sizeY = 25;
+				}
+				else if(livebike[x][2] <10){
+					sizeX = 18;
+					sizeY = 18;	
+				}
+			}
+		}
 		if (stephensGreen.includes(stations[i][0])){
 			marker = new google.maps.Marker({
 			position: new google.maps.LatLng(stations[i][2], stations[i][3]),
-			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",scaledSize: new google.maps.Size(30, 30)}})
+			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",scaledSize: new google.maps.Size(sizeX, sizeY)}})
 			markers.push(marker);
 		}
 		else if (bordGais.includes(stations[i][0])){
 			marker = new google.maps.Marker({
 			position: new google.maps.LatLng(stations[i][2], stations[i][3]),
-			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/pink-dot.png",scaledSize: new google.maps.Size(30, 30)}})
+			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/pink-dot.png",scaledSize: new google.maps.Size(sizeX, sizeY)}})
 			markers.push(marker);
 		}
 		else if (guinessStorehouse.includes(stations[i][0])){
 			marker = new google.maps.Marker({
 			position: new google.maps.LatLng(stations[i][2], stations[i][3]),
-			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",scaledSize: new google.maps.Size(30, 30)}})
+			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",scaledSize: new google.maps.Size(sizeX, sizeY)}})
 			markers.push(marker);
 		}
 		else if (spire.includes(stations[i][0])){
 			marker = new google.maps.Marker({
 			position: new google.maps.LatLng(stations[i][2], stations[i][3]),
-			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",scaledSize: new google.maps.Size(30, 30)}})
+			map: map,icon: {url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",scaledSize: new google.maps.Size(sizeX, sizeY)}})
 			markers.push(marker);
 		}
-				
-         
-        
-	function lineGraphDays(id,name){
-		if(chartDays!=null){
-        	chartDays.destroy();
-    	}
-		// display day dropdown
-		var dayDropdown = document.getElementById("dayDropdown");
-		dayDropdown.style.display = "block";
-		var resetDropdown = document.getElementById("days");
-		resetDropdown.selectedIndex = null;
-		
-		//saves name and ID as global variables
-		stationID = id
-		stationName = name
-
-		//post ID to flask and result is graph
-		jQuery.ajax ({
-		url: 'http://127.0.0.1:5000/linegraphdays',
-		type: "POST",
-		data: JSON.stringify(id),
-		dataType: "json",
-		contentType: "application/json; charset=utf-8",
-		success: function(data, status, xhr){
-			// Line Graph
-			chartDays = new Chart(document.getElementById("line-chart"), {
-			  type: 'line',
-			  data: {
-				labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-				datasets: [{ 
-					data: data,
-					label: "Available Bikes",
-					borderColor: "#3e95cd"
-				  }]
-			  },
-			options: {
-				title: {
-				  display: true,
-				  text: "Station Name: "+name+" ID: "+id
-				}
-			  }
-				
-			});
-			lineGraphHours("Monday")
-		}
-		});
-	};
-        
-       //Access function outside of retrive static info function scope 
-       retrieve_static_info.lineGraphDays=lineGraphDays
-		
+						
         // Add on-click function for each station marker, and populate dropdown with live occupancy information from database
 		google.maps.event.addListener(marker, 'click', (function(marker, i){
 			return function() {	
@@ -230,12 +150,15 @@ function initMap(x) {
 			infowindow.open(map, this);
 			}}
 		)(marker, i));
-	}}
+	}
 	directionsRenderer.setMap(map);
+	; ;
+}
+//Access function outside of retrive static info function scope 
+initMap.marker=marker
 }
 
-var locationsArray = []
-var distanceResults = []	
+	
 	
 function calcRoute() {
 
@@ -439,3 +362,44 @@ function traffic(x) {
 	initMap(x);
 }
 
+function lineGraphDays(id,name){
+	if(chartDays!=null){
+		chartDays.destroy();
+	}
+	// display day dropdown
+	var dayDropdown = document.getElementById("dayDropdown");
+	dayDropdown.style.display = "block";
+	var resetDropdown = document.getElementById("days");
+	resetDropdown.selectedIndex = null;
+
+	//saves name and ID as global variables
+	stationID = id
+	stationName = name
+
+	//post ID to flask and result is graph
+	jQuery.ajax ({
+	url: 'http://127.0.0.1:5000/linegraphdays',type: "POST",data: JSON.stringify(id),dataType: "json",
+	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
+		// Line Graph
+		chartDays = new Chart(document.getElementById("line-chart"), {
+			type: 'line',data: {labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+			datasets: [{data: data,label: "Available Bikes",borderColor: "#3e95cd"
+			 }]},options: {title: {display: true,text: "Station Name: "+name+" ID: "+id}}
+		});
+		lineGraphHours("Monday")}});
+};
+
+function lineGraphHours(day){
+	if(chartHours!=null){
+        chartHours.destroy();
+    }
+	//post ID to flask and result is graph
+	jQuery.ajax ({
+	url: 'http://127.0.0.1:5000/linegraphhours', type: "POST", data: JSON.stringify([day,stationID]),
+	dataType: "json", contentType: "application/json; charset=utf-8", success: function(data, status, xhr){
+		chartHours = new Chart(document.getElementById("line-chart-hours"), {
+			type: 'line',data: {labels: ["8-9","9-10","10-11","11-12","12-13","13-14","14-15","15-16","16-17","17-18","18-19","19-20","20-21","21-22","22-23","23-00"],datasets: [{data: data,
+			label: "Available Bikes",borderColor: "#3e95cd"}]},options: {title: {display: true, text: "Station Name: "+stationName+" ID: "+stationID}}
+		});
+	}});
+};
