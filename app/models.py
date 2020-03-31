@@ -71,6 +71,9 @@ bike_schema = liveSchema(many=True)
 
 
 class live_weather_data(db.Model):
+    number = db.Column(db.Integer, primary_key=True)
+    rain = db.Column(db.Float, primary_key=True)
+    day = db.Column(db.String(80), primary_key=True)
     description = db.Column(db.String(80), primary_key=True)
     icon = db.Column(db.String(80), primary_key=True)
     temp = db.Column(db.Float, primary_key=True)
@@ -81,8 +84,11 @@ class live_weather_data(db.Model):
     date = db.Column(db.DateTime(), primary_key=True)
     time = db.Column(db.TIME, primary_key=True)
 
-    def __init__(self, description, icon, temp, tempFeels, windSpeed,
+    def __init__(self, number, rain, day, description, icon, temp, tempFeels, windSpeed,
                  humidity, pressure, date, time):
+        self.number = number
+        self.rain = rain
+        self.day = day
         self.description = description
         self.icon = icon
         self.temp = temp
@@ -95,6 +101,9 @@ class live_weather_data(db.Model):
 
 
 class weatherSchema(Schema):
+    number = fields.Int(dump_only=True)
+    rain = fields.Float(dump_only=True)
+    day = fields.Str()
     description = fields.Str()
     icon = fields.Str()
     temp = fields.Float(dump_only=True)
@@ -107,7 +116,8 @@ class weatherSchema(Schema):
     formatted_name = fields.Method("format_name", dump_only=True)
 
     def format_name(self, live_weather_data):
-        return "{}, {}".format(live_weather_data.description, live_weather_data.icon,
+        return "{}, {}".format(live_weather_data.number, live_weather_data.rain, live_weather_data.day,
+                               live_weather_data.description, live_weather_data.icon,
                                live_weather_data.temp, live_weather_data.tempFeels, live_weather_data.windSpeed,
                                live_weather_data.humidity, live_weather_data.pressure,
                                live_weather_data.date, live_weather_data.time)
