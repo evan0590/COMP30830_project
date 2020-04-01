@@ -1,25 +1,8 @@
 import pickle
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
-
-from sklearn import linear_model
 from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import cross_validate
-from sklearn.model_selection import cross_val_score
-from sklearn.utils import resample
-from sklearn.model_selection import KFold
-
-import sqlalchemy as sqla
-import pymysql
 from sqlalchemy import create_engine
-
-import csv
-import datetime as dt
 
 URI = 'database-comp30830.c2kwpm1jk01q.us-east-1.rds.amazonaws.com'
 PORT = '3306'
@@ -34,12 +17,12 @@ bikes = pd.read_sql_table('live_bike_data', engine)
 weather = pd.read_sql_table('live_weather_data', engine)
 # Make a new dataframe of these tables
 # This step is necessary for joining the tables. As they are,
-# Python throws a TypeError when attempting the code at lines 44-45.
-bikes.to_csv('allBikes.csv', index=False)
-weather.to_csv('allWeather.csv', index=False)
+# Python throws a TypeError when attempting the code at lines 26-27.
+bikes.to_csv('csvfiles/allBikes.csv', index=False)
+weather.to_csv('csvfiles/allWeather.csv', index=False)
 # Read csv files into dataframes.
-bikes = pd.read_csv('allBikes.csv')
-weather = pd.read_csv('allWeather.csv')
+bikes = pd.read_csv('csvfiles/allBikes.csv')
+weather = pd.read_csv('csvfiles/allWeather.csv')
 # create common datatype for merging.
 bikes['datetime'] = pd.to_datetime(bikes['date'] + ' ' + bikes['time'])
 weather['datetime'] = pd.to_datetime(weather['date'] + ' ' + weather['time'])
@@ -49,7 +32,7 @@ weather = weather.sort_values(by='datetime')
 full_df = pd.merge_asof(bikes, weather, left_on="datetime", right_on="datetime", direction="nearest")
 # constrict the dataframe to only those times in which the service is available to users.
 full_df = full_df.drop(full_df[(full_df.datetime.dt.hour > 0) & (full_df.datetime.dt.hour < 5)].index)
-## Create four flags each representing the stage of the day.
+# create four flags each representing the stage of the day.
 morning_start = pd.to_datetime("05:00:00").time()
 morning_end = pd.to_datetime("12:00:00").time()
 afternoon_start = pd.to_datetime("12:01:00").time()
@@ -92,20 +75,17 @@ full_df.drop(["date_x", "time_x", "status", "epoch", "main",
               "date_y", "time_y", "day_y"], axis=1, inplace=True)
 # rename availableBikes to target.
 full_df = full_df.rename(columns={"availableBikes": "target"})
-
 # create two separate dataframes for weekday function and weekend function
 week_df = full_df.loc[(full_df['day_x'] >= 0) & (full_df['day_x'] <= 4)]
-weekend_df = full_df.loc[(full_df['day_x'] >= 5) & (full_df['day_x'] <= 6)]
+endweek_df = full_df.loc[(full_df['day_x'] >= 5) & (full_df['day_x'] <= 6)]
 
-# try splitting the dataset here, save X_test as a csv file, read it in on the views side.
 
-# print(week_df.head(5))
-def serialiseModelWeekday(stationId):
-    weekly_df = week_df.loc[(week_df.ID == stationId)]
+def serialise_model_weekday(station_id):
+    weekly_df = week_df.loc[(week_df.ID == station_id)]
     # save a new csv file into dataframe.
-    weekly_df.to_csv('weeklyAvailableBikes.csv', index=False)
+    weekly_df.to_csv('csvfiles/weeklyAvailableBikes.csv', index=False)
     # Read csv files into dataframes.
-    df = pd.read_csv('weeklyAvailableBikes.csv')
+    df = pd.read_csv('csvfiles/weeklyAvailableBikes.csv')
     ## Dropping all columns not necessary for predictive model.
     df.drop(["ID", "datetime"], axis=1, inplace=True)
     # replace days with numbers
@@ -125,15 +105,35 @@ def serialiseModelWeekday(stationId):
     # Drop any rows with null values
     df.dropna(axis=0, how='any', inplace=True)
     model = LinearRegression(fit_intercept=False)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
-    X_test.to_csv('app/testSet.csv', index=False)
-    model.fit(X_train, y_train)
+    model.fit(X, y)
 
-    # Serialize model object into a file called model.pkl on disk using pickle
-    with open('app/model.pkl', 'wb') as handle:
+    with open('app/static/models_weekdays/%s.pkl' % station_id, 'wb') as handle:
         pickle.dump(model, handle, pickle.HIGHEST_PROTOCOL)
     # pickle.HIGHEST_PROTOCOL using the highest available protocol
     # (we used wb to open file as binary and use a higher pickling protocol)
 
 
-serialiseModelWeekday(42)
+def serialise_model_weekend(station_id):
+    weekend_df = endweek_df.loc[(endweek_df.ID == station_id)]
+    weekend_df.to_csv('csvfiles/weekendAvailableBikes.csv', index=False)
+    df = pd.read_csv('csvfiles/weekendAvailableBikes.csv')
+    df.drop(["ID", "datetime"], axis=1, inplace=True)
+    df["day_x"].replace([0, 1, 2, 3, 4, 5, 6], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], inplace=True)
+    df = pd.get_dummies(df, drop_first=True)
+    column_names = list(df.columns)[1:]
+    X = df[column_names]
+    y = df.target
+    add_var = pd.get_dummies(X['tod'], prefix='tod', drop_first=True)
+    X = X.join(add_var)
+    X.drop(columns=['tod'], inplace=True)
+    df.dropna(axis=0, how='any', inplace=True)
+    model = LinearRegression(fit_intercept=False)
+    model.fit(X, y)
+
+    with open('app/static/models_weekends/%s.pkl' % station_id, 'wb') as handle:
+        pickle.dump(model, handle, pickle.HIGHEST_PROTOCOL)
+
+
+for i in full_df['ID'].unique().tolist():
+    serialise_model_weekday(i)
+    serialise_model_weekend(i)

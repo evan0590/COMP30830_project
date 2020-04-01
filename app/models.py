@@ -125,4 +125,37 @@ class weatherSchema(Schema):
 
 weather_schema = weatherSchema(many=True)
 
+
+class future_weather_data(db.Model):
+    number = db.Column(db.Integer, primary_key=True)
+    temp = db.Column(db.Float, primary_key=True)
+    rain = db.Column(db.Float, primary_key=True)
+    day = db.Column(db.String(80), primary_key=True)
+    dateTime = db.Column(db.DateTime(), primary_key=True)
+    time = db.Column(db.TIME, primary_key=True)
+
+    def __init__(self, number, temp, rain, day, dateTime, time):
+        self.number = number
+        self.temp = temp
+        self.rain = rain
+        self.day = day
+        self.dateTime = dateTime
+        self.time = time
+
+
+class futureWeatherSchema(Schema):
+    number = fields.Int(dump_only=True)
+    temp = fields.Float(dump_only=True)
+    rain = fields.Float(dump_only=True)
+    day = fields.Str()
+    dateTime = fields.DateTime(dump_only=True)
+    time = fields.Time(dump_only=True)
+
+    def format_name(self, future_weather_data):
+        return "{}, {}".format(future_weather_schema.number, future_weather_schema.temp, future_weather_schema.rain,
+                               future_weather_schema.day, future_weather_schema.dateTime, future_weather_schema.time)
+
+
+future_weather_schema = futureWeatherSchema(many=True)
+
 print('in models ran')
