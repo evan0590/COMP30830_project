@@ -34,6 +34,7 @@ function populateDropdown(stations){
 	//append station name to dropdown   
 	$('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
 	}
+
 )};
 
 function loadliveBike(){
@@ -57,9 +58,14 @@ function populateInfo(live){
 			 lineGraphDays(stations[i][0],this.value);
 			 for (j=0; j<live.length; j++){
 				//find id match from static station array to id in live station info
-				if(stations[i][0]==live[j][0]){
+				if(stations[i][0]==live[j][0]){	
 					var Info=('<br /> <b>Available Bike Stands: </b>'+live[j][1]+ '<br /><br />'+'<b>Available Bikes: </b>'+live[j][2]);
-					document.getElementById("bikeInfo").innerHTML = Info;            
+					document.getElementById("bikeInfo").innerHTML = Info;   
+					// display day dropdown
+					var dayDropdown = document.getElementById("futureDayDropdown");
+					dayDropdown.style.display = "block";
+					var resetDropdown = document.getElementById("futureDays");
+					resetDropdown.selectedIndex = null;
 			 }}}}
  })};
 
@@ -403,3 +409,20 @@ function lineGraphHours(day){
 		});
 	}});
 };
+
+function futurePredict(){
+	var dayDropdown = document.getElementById("futureDays");
+	var selectedDay = dayDropdown.options[dayDropdown.selectedIndex].text;
+	var hourDropdown = document.getElementById("futurehours");
+	var selectedHour = hourDropdown.options[hourDropdown.selectedIndex].text;	
+
+	//post ID to flask and result is graph
+	jQuery.ajax ({
+	url: 'http://127.0.0.1:5000/predict',type: "POST",data: JSON.stringify([stationID,selectedDay,selectedHour]),dataType: "json",
+	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
+			console.log(data)
+	
+	}});
+};
+
+
