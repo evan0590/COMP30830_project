@@ -182,9 +182,39 @@
                     <h4 class="titr_recherche">Select a station below for live updated information</h4>
                     <br>
                     <select id="stationdrop" class="dropdowns">
-                    </select>
-                    <br>
-                    <h4 id="bikeInfo"></h4>
+        			</select>
+					<h4 id="bikeInfo"></h4><br>
+					<div id="futureDayDropdown" style="display: none;">
+						<h6>Select future day</h6>
+						<select id="futureDays">
+							<option value="Today1">Today1</option>
+							<option value="Today2">Today2</option>
+							<option value="Today3">Today3</option>
+							<option value="Today4">Today4</option>
+							<option value="Today5">Today5</option>
+						</select><br>
+						<h6>Select Time</h6>
+						<select id="futurehours">
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+							<option value="14">14</option>
+							<option value="15">15</option>
+							<option value="16">16</option>
+							<option value="17">17</option>
+							<option value="18">18</option>
+							<option value="19">19</option>
+							<option value="20">20</option>
+							<option value="21">21</option>
+							<option value="22">22</option>
+							<option value="23">23</option>
+							<option value="00">00</option>
+						</select><br>
+						<input type="submit" onclick="return futurePredict()" /> 
+					</div>
                 </div>
                 
                 <div class="ColumnA">
