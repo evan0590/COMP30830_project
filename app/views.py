@@ -27,97 +27,101 @@ with open('app/static/models_weekdays/2.pkl', 'rb') as handle:
     print(model)
 
 
-@application.route("/predict")
+@application.route("/predict", methods=['POST', 'GET'])
 def predict():
-    weather = future_weather_data.query.order_by(future_weather_data.dateTime.desc()).order_by(
-        desc(future_weather_data.time)).limit(1).all()
-    result = future_weather_schema.dump(weather)
-    # creating dataframe for testing here.
-    dataframe = pd.DataFrame(result)
-    # convert dateTime object column to datetime[ns] data type.
-    dataframe.dateTime = pd.to_datetime(dataframe.dateTime)
-    # creating columns to match the training input dataset.
-    morning_start = pd.to_datetime("05:00:00").time()
-    morning_end = pd.to_datetime("12:00:00").time()
-    afternoon_start = pd.to_datetime("12:01:00").time()
-    afternoon_end = pd.to_datetime("16:59:00").time()
-    evening_start = pd.to_datetime("17:00:00").time()
-    evening_end = pd.to_datetime("20:00:00").time()
-    night_start = pd.to_datetime("20:01:00").time()
-    night_end = pd.to_datetime("23:59:59").time()
-    dataframe['morning'] = np.where((dataframe['dateTime'].dt.time > morning_start)
-                                    & (dataframe['dateTime'].dt.time < morning_end),
-                                    1, 0)
+	result = request.json
+	stationID = result[0]
+	day = result[1]
+	hour = result[2]
+	weather = future_weather_data.query.order_by(future_weather_data.dateTime.desc()).order_by(
+	    desc(future_weather_data.time)).limit(1).all()
+	result = future_weather_schema.dump(weather)
+	# creating dataframe for testing here.
+	dataframe = pd.DataFrame(result)
+	# convert dateTime object column to datetime[ns] data type.
+	dataframe.dateTime = pd.to_datetime(dataframe.dateTime)
+	# creating columns to match the training input dataset.
+	morning_start = pd.to_datetime("05:00:00").time()
+	morning_end = pd.to_datetime("12:00:00").time()
+	afternoon_start = pd.to_datetime("12:01:00").time()
+	afternoon_end = pd.to_datetime("16:59:00").time()
+	evening_start = pd.to_datetime("17:00:00").time()
+	evening_end = pd.to_datetime("20:00:00").time()
+	night_start = pd.to_datetime("20:01:00").time()
+	night_end = pd.to_datetime("23:59:59").time()
+	dataframe['morning'] = np.where((dataframe['dateTime'].dt.time > morning_start)
+	                                & (dataframe['dateTime'].dt.time < morning_end),
+	                                1, 0)
 
-    dataframe['afternoon'] = np.where((dataframe['dateTime'].dt.time > afternoon_start)
-                                      & (dataframe['dateTime'].dt.time < afternoon_end),
-                                      1, 0)
+	dataframe['afternoon'] = np.where((dataframe['dateTime'].dt.time > afternoon_start)
+	                                  & (dataframe['dateTime'].dt.time < afternoon_end),
+	                                  1, 0)
 
-    dataframe['evening'] = np.where((dataframe['dateTime'].dt.time > evening_start)
-                                    & (dataframe['dateTime'].dt.time < evening_end),
-                                    1, 0)
+	dataframe['evening'] = np.where((dataframe['dateTime'].dt.time > evening_start)
+	                                & (dataframe['dateTime'].dt.time < evening_end),
+	                                1, 0)
 
-    dataframe['night'] = np.where((dataframe['dateTime'].dt.time > night_start)
-                                  & (dataframe['dateTime'].dt.time < night_end),
-                                  1, 0)
-    dataframe["tod"] = dataframe.dateTime.dt.hour
-    # categorise weather codes
-    dataframe["number"].replace([801, 802, 803, 804], 'clouds', inplace=True)
-    dataframe["number"].replace([800], 'clear', inplace=True)
-    dataframe["number"].replace([701, 711, 721, 731, 741, 751, 761, 762, 771, 781], 'Atmosphere', inplace=True)
-    dataframe["number"].replace([600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622], 'snow', inplace=True)
-    dataframe["number"].replace([500, 501, 502, 503, 504, 511, 520, 521, 522, 531], 'rainfall', inplace=True)
-    dataframe["number"].replace([300, 301, 302, 310, 311, 312, 313, 314, 321], 'drizzle', inplace=True)
-    dataframe["number"].replace([200, 201, 202, 210, 211, 212, 221, 230, 231, 232], 'thunderstorm', inplace=True)
-    # add a flag that indicates whether a day is dry (has zero rain)
-    dataframe['dry_day'] = (dataframe['rain'] == 0).astype(int)
-    # binary encode days to match input dataset
-    dataframe['day_x_Mon'] = np.where((dataframe['day'] == 'Mon'), 1, 0)
-    dataframe['day_x_Thu'] = np.where((dataframe['day'] == 'Thu'), 1, 0)
-    dataframe['day_x_Tue'] = np.where((dataframe['day'] == 'Tue'), 1, 0)
-    dataframe['day_x_Wed'] = np.where((dataframe['day'] == 'Wed'), 1, 0)
-    # binary encode weather categories to match input dataset.
-    dataframe['number_clear'] = np.where((dataframe['number'] == 'clear'), 1, 0)
-    dataframe['number_clouds'] = np.where((dataframe['number'] == 'clouds'), 1, 0)
-    dataframe['number_drizzle'] = np.where((dataframe['number'] == 'drizzle'), 1, 0)
-    dataframe['number_rainfall'] = np.where((dataframe['number'] == 'rainfall'), 1, 0)
-    # binary encode times of the day to match input dataset.
-    dataframe['tod_5'] = np.where((dataframe['tod'] == 5), 1, 0)
-    dataframe['tod_6'] = np.where((dataframe['tod'] == 6), 1, 0)
-    dataframe['tod_7'] = np.where((dataframe['tod'] == 7), 1, 0)
-    dataframe['tod_8'] = np.where((dataframe['tod'] == 8), 1, 0)
-    dataframe['tod_9'] = np.where((dataframe['tod'] == 9), 1, 0)
-    dataframe['tod_10'] = np.where((dataframe['tod'] == 10), 1, 0)
-    dataframe['tod_11'] = np.where((dataframe['tod'] == 11), 1, 0)
-    dataframe['tod_12'] = np.where((dataframe['tod'] == 12), 1, 0)
-    dataframe['tod_13'] = np.where((dataframe['tod'] == 13), 1, 0)
-    dataframe['tod_14'] = np.where((dataframe['tod'] == 14), 1, 0)
-    dataframe['tod_15'] = np.where((dataframe['tod'] == 15), 1, 0)
-    dataframe['tod_16'] = np.where((dataframe['tod'] == 16), 1, 0)
-    dataframe['tod_17'] = np.where((dataframe['tod'] == 17), 1, 0)
-    dataframe['tod_18'] = np.where((dataframe['tod'] == 18), 1, 0)
-    dataframe['tod_19'] = np.where((dataframe['tod'] == 19), 1, 0)
-    dataframe['tod_20'] = np.where((dataframe['tod'] == 20), 1, 0)
-    dataframe['tod_21'] = np.where((dataframe['tod'] == 21), 1, 0)
-    dataframe['tod_22'] = np.where((dataframe['tod'] == 22), 1, 0)
-    dataframe['tod_23'] = np.where((dataframe['tod'] == 23), 1, 0)
-    # # We can also do this directly for all categorical features
-    # dataframe = pd.get_dummies(dataframe, drop_first=True)
-    # # drop_first = True removes multi-collinearity
-    # add_var = pd.get_dummies(dataframe['tod'], prefix='tod', drop_first=True)
-    # # Add all the columns to the model data
-    # dataframe = dataframe.join(add_var)
-    # drop columns not found in input dataset
-    dataframe.drop(columns=['tod', 'dateTime', 'number', 'day', 'time'], inplace=True)
-    # align the rain column with its index in training dataset
-    col = dataframe.pop("rain")
-    dataframe.insert(1, col.name, col)
-    print(dataframe.head(5))
-    print(dataframe.dtypes)
-    predict = model.predict(dataframe)
-    # to prevent this error: NumPy array is not JSON serializable
-    prediction = predict.tolist()
-    return jsonify(prediction)
+	dataframe['night'] = np.where((dataframe['dateTime'].dt.time > night_start)
+	                              & (dataframe['dateTime'].dt.time < night_end),
+	                              1, 0)
+	dataframe["tod"] = dataframe.dateTime.dt.hour
+	# categorise weather codes
+	dataframe["number"].replace([801, 802, 803, 804], 'clouds', inplace=True)
+	dataframe["number"].replace([800], 'clear', inplace=True)
+	dataframe["number"].replace([701, 711, 721, 731, 741, 751, 761, 762, 771, 781], 'Atmosphere', inplace=True)
+	dataframe["number"].replace([600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622], 'snow', inplace=True)
+	dataframe["number"].replace([500, 501, 502, 503, 504, 511, 520, 521, 522, 531], 'rainfall', inplace=True)
+	dataframe["number"].replace([300, 301, 302, 310, 311, 312, 313, 314, 321], 'drizzle', inplace=True)
+	dataframe["number"].replace([200, 201, 202, 210, 211, 212, 221, 230, 231, 232], 'thunderstorm', inplace=True)
+	# add a flag that indicates whether a day is dry (has zero rain)
+	dataframe['dry_day'] = (dataframe['rain'] == 0).astype(int)
+	# binary encode days to match input dataset
+	dataframe['day_x_Mon'] = np.where((dataframe['day'] == 'Mon'), 1, 0)
+	dataframe['day_x_Thu'] = np.where((dataframe['day'] == 'Thu'), 1, 0)
+	dataframe['day_x_Tue'] = np.where((dataframe['day'] == 'Tue'), 1, 0)
+	dataframe['day_x_Wed'] = np.where((dataframe['day'] == 'Wed'), 1, 0)
+	# binary encode weather categories to match input dataset.
+	dataframe['number_clear'] = np.where((dataframe['number'] == 'clear'), 1, 0)
+	dataframe['number_clouds'] = np.where((dataframe['number'] == 'clouds'), 1, 0)
+	dataframe['number_drizzle'] = np.where((dataframe['number'] == 'drizzle'), 1, 0)
+	dataframe['number_rainfall'] = np.where((dataframe['number'] == 'rainfall'), 1, 0)
+	# binary encode times of the day to match input dataset.
+	dataframe['tod_5'] = np.where((dataframe['tod'] == 5), 1, 0)
+	dataframe['tod_6'] = np.where((dataframe['tod'] == 6), 1, 0)
+	dataframe['tod_7'] = np.where((dataframe['tod'] == 7), 1, 0)
+	dataframe['tod_8'] = np.where((dataframe['tod'] == 8), 1, 0)
+	dataframe['tod_9'] = np.where((dataframe['tod'] == 9), 1, 0)
+	dataframe['tod_10'] = np.where((dataframe['tod'] == 10), 1, 0)
+	dataframe['tod_11'] = np.where((dataframe['tod'] == 11), 1, 0)
+	dataframe['tod_12'] = np.where((dataframe['tod'] == 12), 1, 0)
+	dataframe['tod_13'] = np.where((dataframe['tod'] == 13), 1, 0)
+	dataframe['tod_14'] = np.where((dataframe['tod'] == 14), 1, 0)
+	dataframe['tod_15'] = np.where((dataframe['tod'] == 15), 1, 0)
+	dataframe['tod_16'] = np.where((dataframe['tod'] == 16), 1, 0)
+	dataframe['tod_17'] = np.where((dataframe['tod'] == 17), 1, 0)
+	dataframe['tod_18'] = np.where((dataframe['tod'] == 18), 1, 0)
+	dataframe['tod_19'] = np.where((dataframe['tod'] == 19), 1, 0)
+	dataframe['tod_20'] = np.where((dataframe['tod'] == 20), 1, 0)
+	dataframe['tod_21'] = np.where((dataframe['tod'] == 21), 1, 0)
+	dataframe['tod_22'] = np.where((dataframe['tod'] == 22), 1, 0)
+	dataframe['tod_23'] = np.where((dataframe['tod'] == 23), 1, 0)
+	# # We can also do this directly for all categorical features
+	# dataframe = pd.get_dummies(dataframe, drop_first=True)
+	# # drop_first = True removes multi-collinearity
+	# add_var = pd.get_dummies(dataframe['tod'], prefix='tod', drop_first=True)
+	# # Add all the columns to the model data
+	# dataframe = dataframe.join(add_var)
+	# drop columns not found in input dataset
+	dataframe.drop(columns=['tod', 'dateTime', 'number', 'day', 'time'], inplace=True)
+	# align the rain column with its index in training dataset
+	col = dataframe.pop("rain")
+	dataframe.insert(1, col.name, col)
+	print(dataframe.head(5))
+	print(dataframe.dtypes)
+	predict = model.predict(dataframe)
+	# to prevent this error: NumPy array is not JSON serializable
+	prediction = predict.tolist()
+	return jsonify(prediction)
 
 
 @application.route('/static')
