@@ -12,30 +12,78 @@ var stationName;
 var stationID;
 var chartHours;
 var chartDays;
+var futureDates=[];
 var stations=[];
 var livebike=[];
 var locationsArray = []
 var distanceResults = []
+
+
+function loadnewweather(){
+	$.getJSON('http://127.0.0.1:5000/futureweather', function(data, status, xhr){
+		for (var i = 0; i < data.length; i++ ) {
+			futureDates[i]=data[i].date + " " + data[i].day;
+//			futureDates[i]=data[i].date;
+
+		}
+
+        console.log(futureDates);
+        // removing duplicate dates
+        var uniqueDays = [];
+			var count = 0;
+			var start = false;
+
+			for (j = 0; j < futureDates.length; j++) {
+			    for (k = 0; k < uniqueDays.length; k++) {
+			        if (futureDates[j] == uniqueDays[k] ) {
+			            start = true;
+			        }
+			    }
+			    count++;
+			    if (count == 1 && start == false) {
+			        uniqueDays.push(futureDates[j]);
+			    }
+			    start = false;
+			    count = 0;
+			}
+			uniqueDays.length = 5;
+		console.log(uniqueDays);
+		populatenewDropdown(uniqueDays)
+		});
+
+};
+
+
+function populatenewDropdown(uniqueDays){
+	$.each(uniqueDays, function (i, element) {
+	//append dates name to dropdown
+	$('#futureDays').append($('<option></option>').val(element).html(element));
+	}
+
+)};
+
 
 function loadstaticbike(){
 	$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			//stations.push(data[i]);
 			stations[i]=[data[i].ID, String(data[i].name), data[i].Latitude, data[i].Longtitude];
-		}   
+		}
 		//As Jquery call is asynchronous we need to call below functions now to populate map and pass in station info as parameter, otherwise code may execute out of order
 
-		populateDropdown(stations)    
+		populateDropdown(stations)
 		});
 };
 
+
 function populateDropdown(stations){
 	$.each(stations, function (i, element) {
-	//append station name to dropdown   
+	//append station name to dropdown
 	$('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
 	}
 
 )};
+
 
 function loadliveBike(){
 	$.getJSON('http://127.0.0.1:5000/live', function(data, status, xhr){
@@ -90,6 +138,8 @@ function initMap(x) {
 	else if(x == '3'){
 		trafficLayer.setMap(map);	
 	}
+
+	loadnewweather();
     
     loadstaticbike();
    	
@@ -420,9 +470,9 @@ function futurePredict(){
 	jQuery.ajax ({
 	url: 'http://127.0.0.1:5000/predict',type: "POST",data: JSON.stringify([stationID,selectedDay,selectedHour]),dataType: "json",
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
+	    var predictInfo=('<br /> <b>Predicted Available Bikes: </b>'+ data);
+	    document.getElementById("predictionInfo").innerHTML = predictInfo;
 			console.log(data)
-	
+
 	}});
 };
-
-

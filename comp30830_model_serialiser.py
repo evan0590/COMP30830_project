@@ -17,7 +17,7 @@ bikes = pd.read_sql_table('live_bike_data', engine)
 weather = pd.read_sql_table('live_weather_data', engine)
 # Make a new dataframe of these tables
 # This step is necessary for joining the tables. As they are,
-# Python throws a TypeError when attempting the code at lines 26-27.
+# Python throws a TypeError when attempting the code at lines 27-28.
 bikes.to_csv('csvfiles/allBikes.csv', index=False)
 weather.to_csv('csvfiles/allWeather.csv', index=False)
 # Read csv files into dataframes.
