@@ -134,8 +134,10 @@ class future_weather_data(db.Model):
     dateTime = db.Column(db.DateTime(), primary_key=True)
     time = db.Column(db.TIME, primary_key=True)
     date = db.Column(db.DateTime(), primary_key=True)
+    tempFeels = db.Column(db.Float, primary_key=True)
+    descripton = db.Column(db.String(80), primary_key=True)
 
-    def __init__(self, number, temp, rain, day, dateTime, time, date):
+    def __init__(self, number, temp, rain, day, dateTime, time, date, tempFeels, descripton):
         self.number = number
         self.temp = temp
         self.rain = rain
@@ -143,6 +145,8 @@ class future_weather_data(db.Model):
         self.dateTime = dateTime
         self.time = time
         self.date = date
+        self.tempFeels = tempFeels
+        self.descripton = descripton
 
 class futureWeatherSchema(Schema):
     number = fields.Int(dump_only=True)
@@ -152,11 +156,14 @@ class futureWeatherSchema(Schema):
     dateTime = fields.DateTime(dump_only=True)
     time = fields.Time(dump_only=True)
     date = fields.Date(dump_only=True)
+    tempFeels = fields.Float(dump_only=True)
+    descripton = fields.Str()
+
 
     def format_name(self, future_weather_data):
         return "{}, {}".format(future_weather_data.number, future_weather_data.temp, future_weather_data.rain,
                                future_weather_data.day, future_weather_data.dateTime, future_weather_data.time,
-                               future_weather_data.date)
+                               future_weather_data.date, future_weather_data.tempFeels, future_weather_data.descripton)
 
 
 future_weather_schema = futureWeatherSchema(many=True)

@@ -99,11 +99,15 @@ def future_weather_json():
     return jsonify(result)
 
 
-@application.route('/futureweatherbee')
-def future_weather_json_b():
-    today = str(date.today())
-    date_info = future_weather_data.query.filter(future_weather_data.date == today).all()
-    result = future_weather_schema.dump(date_info)
+@application.route('/futureweatherpredict', methods=['POST', 'GET'])
+def future_weather_predict():
+    result = request.json
+    date_day = str(result[0])
+    day = date_day[0:10]
+    hour = str(result[1])
+    weather = future_weather_data.query.filter(future_weather_data.date == day).filter(
+        future_weather_data.time == hour).all()
+    result = future_weather_schema.dump(weather)
     return jsonify(result)
 
 
@@ -111,7 +115,8 @@ def future_weather_json_b():
 def predict():
     result = request.json
     stationID = result[0]
-    day = str(result[1])
+    date_day = str(result[1])
+    day = date_day[0:10]
     hour = str(result[2])
     weather = future_weather_data.query.filter(future_weather_data.date == day).filter(
         future_weather_data.time == hour).all()
@@ -211,3 +216,5 @@ def predict():
         predict = np.around(predict)
         prediction = predict.tolist()
     return jsonify(prediction[0])
+
+

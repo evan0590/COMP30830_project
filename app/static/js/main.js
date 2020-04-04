@@ -474,5 +474,17 @@ function futurePredict(){
 	    document.getElementById("predictionInfo").innerHTML = predictInfo;
 			console.log(data)
 
-	}});
+	}})
+
+	jQuery.ajax ({
+	url: 'http://127.0.0.1:5000/futureweatherpredict',type: "POST",data: JSON.stringify([selectedDay,selectedHour]),dataType: "json",
+	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
+	    var predictWeather=('<b>The temperature will feel like: </b>'+ data[0].tempFeels + '<sup>°C</sup>'
+	    + '<b> accompanied by: </b>' + data[0].descripton);
+	    document.getElementById("predictionWeather").innerHTML = predictWeather;
+			console.log(data)
+
+	}})
+	;
+
 };
