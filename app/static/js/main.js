@@ -18,7 +18,6 @@ var livebike=[];
 var locationsArray = []
 var distanceResults = []
 
-
 function loadnewweather(){
 	$.getJSON('http://127.0.0.1:5000/futureweather', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
@@ -27,7 +26,6 @@ function loadnewweather(){
 
 		}
 
-        console.log(futureDates);
         // removing duplicate dates
         var uniqueDays = [];
 			var count = 0;
@@ -47,7 +45,6 @@ function loadnewweather(){
 			    count = 0;
 			}
 			uniqueDays.length = 5;
-		console.log(uniqueDays);
 		populatenewDropdown(uniqueDays)
 		});
 
@@ -63,15 +60,20 @@ function populatenewDropdown(uniqueDays){
 )};
 
 
-function loadstaticbike(){
+function loadstaticbike(x){
 	$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			//stations.push(data[i]);
 			stations[i]=[data[i].ID, String(data[i].name), data[i].Latitude, data[i].Longtitude];
 		}
 		//As Jquery call is asynchronous we need to call below functions now to populate map and pass in station info as parameter, otherwise code may execute out of order
+		
+		// this if function required as if not the if user clicks bike and traffic lane then dropdown multiplies
+		if (x ==null){
+			populateDropdown(stations)
+		}
+		loadliveBike();
 
-		populateDropdown(stations)
 		});
 };
 
@@ -81,10 +83,17 @@ function populateDropdown(stations){
 	//append station name to dropdown
 	$('#stationdrop').append($('<option></option>').val(element[1]).html(element[1]));
 	}
+)
+	// sort stations by alphabetical order https://stackoverflow.com/questions/12073270/sorting-options-elements-alphabetically-using-jquery
+	$("#stationdrop").append($("#stationdrop option").remove().sort(function(a, b) {
+    var at = $(a).text(), bt = $(b).text();
+    return (at > bt)?1:((at < bt)?-1:0);
+}));
+	var stationdrop = document.getElementById("stationdrop");
+	stationdrop.selectedIndex = 0;
+};
 
-)};
-
-
+var loadalert = 0;
 function loadliveBike(){
 	$.getJSON('http://127.0.0.1:5000/live', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
@@ -94,6 +103,12 @@ function loadliveBike(){
 		populateInfo(livebike);
         
         initMap.marker()
+		
+		if(loadalert ==0){
+			// ask user if they would like to share their location
+			getLocation()
+			loadalert = loadalert+1;
+		}
 		});
 };
 
@@ -119,6 +134,8 @@ function populateInfo(live){
 
 function initMap(x) {
 	
+	var x = x;
+			
 	directionsService = new google.maps.DirectionsService();
 	directionsRenderer = new google.maps.DirectionsRenderer();
 	bikeLayer = new google.maps.BicyclingLayer();
@@ -138,13 +155,11 @@ function initMap(x) {
 	else if(x == '3'){
 		trafficLayer.setMap(map);	
 	}
-
+	
 	loadnewweather();
-    
-    loadstaticbike();
-   	
-	loadliveBike();
-        
+	loadstaticbike(x);
+	
+   	    
 	var infowindow = new google.maps.InfoWindow()
 	
 	var sizeX;
@@ -196,6 +211,7 @@ function initMap(x) {
         // Add on-click function for each station marker, and populate dropdown with live occupancy information from database
 		google.maps.event.addListener(marker, 'click', (function(marker, i){
 			return function() {	
+			loadalert = loadliveBike+1;
 			loadliveBike();
 			for (j = 0; j < livebike.length; j++){
 				if(stations[i][0]==livebike[j][0]){
@@ -213,8 +229,6 @@ function initMap(x) {
 //Access function outside of retrive static info function scope 
 initMap.marker=marker
 }
-
-	
 	
 function calcRoute() {
 
@@ -226,10 +240,10 @@ function calcRoute() {
 	locationsArray.length = 0
 	distanceResults.length = 0
 	
-	var start = document.getElementById('start').value;
+	var start = document.getElementById('start').value+'-Dublin';
 	startFormat = start.replace(/\s/g, '-')
 	
-	var end = document.getElementById('end').value;
+	var end = document.getElementById('end').value+'-Dublin';
 	endFormat = end.replace(/\s/g, '-')
 	
 	if ( !document.getElementById('end').value | !document.getElementById('start').value){
@@ -244,7 +258,7 @@ function calcRoute() {
 		setTimeout(() => { findLatLong(endFormat); }, 2000);
 
 		setTimeout(() => { 
-		var result = distance();
+		distance();
 		},4000);
 
 		setTimeout(() => { 
@@ -306,12 +320,25 @@ function calcRoute() {
 				initMap()
 				document.getElementById("result").innerHTML ="The closest bike station to both "+start.toUpperCase()+" and "+end.toUpperCase()+" is ID: "+distanceResults[0]+" Name: "+distanceResults[1]+"<br />";			
 			}
-			else{	
+			else{
+				// calculate availble bikes and stands at start and end station.
+				for (i = 0; i < livebike.length; i++) {  
+					if(distanceResults[0]==livebike[i][0]){	
+						availableBikes = livebike[i][2];
+					}
+					if(distanceResults[3]==livebike[i][0]){	
+						availableStands = livebike[i][1];
+					}
+				}
+		
 				document.getElementById("result").innerHTML ="<i class="+'"material-icons"'+"style="+">"+"directions_walk"+"</i>"+" "+distanceAtoB+" from "+start.toUpperCase()+" to station ID:"+distanceResults[0]+" Name: "+distanceResults[1]+"<br />"+
 
 				"<i class="+'"material-icons"'+"style="+">"+"directions_bike"+"</i>"+" "+distanceBtoC+" from station ID:"+distanceResults[0]+" Name: "+distanceResults[1]+" to station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+"<br />"+
 
-				"<i class="+'"material-icons"'+"style="+">"+"directions_walk"+"</i>"+" "+distanceCtoD+" from station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+" to "+ end.toUpperCase()+"<br />";
+				"<i class="+'"material-icons"'+"style="+">"+"directions_walk"+"</i>"+" "+distanceCtoD+" from station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+" to "+ end.toUpperCase()+"<br />"+"<br />"+
+					
+				"Available Bikes at "+distanceResults[1]+" is: "+availableBikes+"<br />"+
+				"Available Stands at "+distanceResults[4]+" is: "+availableStands;
 			}
 		},9000);
 	}
@@ -319,7 +346,7 @@ function calcRoute() {
 	
 function findLatLong(x){
 
-	var location = x; 
+	var location = x;
 
 	var xmlhttp = new XMLHttpRequest();
 	var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+location+",+Dublin&key=AIzaSyDFfQele6SPurbIljoHv4tVF5USA_7y1-o";  
@@ -341,11 +368,12 @@ function findLatLong(x){
 
 }	
 	
-function distance(lat1, lon1, lat2, lon2, unit) {
+function distance() {
 	var startLat = locationsArray[0];
 	var startLon = locationsArray[1];
 	var endLat = locationsArray[2];
 	var endLon = locationsArray[3];
+	var unit = 'K';
 
 	if ((startLat == endLat) && (startLon == endLon)) {
 		return 0;
@@ -356,7 +384,6 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 		var startStation = [];
 		var closestEnd = 0;
 		var endStation = [];
-
 		//calculates for start station
 		for (i = 0; i < stations.length; i++) {  
 			var radlatStart = Math.PI * startLat/180;
@@ -472,7 +499,6 @@ function futurePredict(){
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
 	    var predictInfo=('<br /> <b>Predicted Available Bikes: </b>'+ data);
 	    document.getElementById("predictionInfo").innerHTML = predictInfo;
-			console.log(data)
 
 	}})
 
@@ -482,9 +508,99 @@ function futurePredict(){
 	    var predictWeather=('<b>The temperature will feel like: </b>'+ data[0].tempFeels + '<sup>°C</sup>'
 	    + '<b> accompanied by: </b>' + data[0].descripton);
 	    document.getElementById("predictionWeather").innerHTML = predictWeather;
-			console.log(data)
 
 	}})
 	;
 
 };
+
+
+// used w3 school tutorial https://www.w3schools.com/html/html5_geolocation.asp	
+function getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition, displayError);
+		} 
+		else { 
+			alert("Geolocation is not supported by this browser.");
+		}
+	return;
+}
+
+
+function showPosition(position) {
+	closestStation(position.coords.latitude,position.coords.longitude,'k')
+}
+
+function displayError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
+      break;
+  }
+}
+
+function closestStation(lat, lon, unit) {
+	var startLat = lat;
+	var startLon = lon;	
+	var closestStart = 0;
+	var startStation =0;
+
+	//calculates for start station
+	var hellostations = stations;
+	
+	for (i = 0; i < stations.length; i++) {  
+		var radlatStart = Math.PI * startLat/180;
+		var radlatStations = Math.PI * stations[i][2]/180;
+		var thetaStart = startLon-stations[i][3];
+		var radthetaStart = Math.PI * thetaStart/180;
+		var distStart = Math.sin(radlatStart) * Math.sin(radlatStations) + Math.cos(radlatStart) * Math.cos(radlatStations) * Math.cos(radthetaStart);
+		if (distStart > 1) {
+			distStart = 1;
+		}	
+		distStart = Math.acos(distStart);
+		distStart = distStart * 180/Math.PI;
+		distStart = distStart * 60 * 1.1515;
+		if (unit=="K") { distStart = distStart * 1.609344 }
+		if (unit=="N") { distStart = distStart * 0.8684 }
+		if (i==0){
+			closestStart = distStart.toFixed(2);
+			startStation= stations[i];
+		}	
+		else if (distStart < closestStart){
+			closestStart = distStart.toFixed(2);
+			startStation=stations[i];
+		}
+
+}
+	// find the available bikes in the closest station
+		for (i = 0; i < livebike.length; i++) {  
+			if(startStation[0]==livebike[i][0]){	
+				availableBikes = livebike[i][2];
+			}
+		}
+	if (stephensGreen.includes(startStation[0])){
+	alert('Hi, the closest bike station to your location is:\nID: '+startStation[0] +' Name: '+startStation[1]+'\nAvailable Bikes: '+availableBikes+'\n\nBe sure to check out St Stephens Green while you are in the area!');
+	}
+	else if (bordGais.includes(startStation[0])){
+	alert('Hi, the closest bike station to your location is:\nID: '+startStation[0] +' Name: '+startStation[1]+'\nAvailable Bikes: '+availableBikes+'\n\nThe Bord Gais theatre is close by so be sure to act extra civilised');
+	}
+	else if (guinessStorehouse.includes(startStation[0])){
+	alert('Hi, the closest bike station to your location is:\nID: '+startStation[0] +' Name: '+startStation[1]+'\nAvailable Bikes: '+availableBikes+'\n\nWhy not head along to the Guinness Storehouse while you are in the area? You have earned it!');
+	}
+	else if (spire.includes(startStation[0])){
+	alert('Hi, the closest bike station to your location is:\nID: '+startStation[0] +' Name: '+startStation[1]+'\nAvailable Bikes: '+availableBikes+'\n\nYou are nearby the Spire so keep an eye out. It is difficult to miss!');
+
+}
+
+}
+
+
