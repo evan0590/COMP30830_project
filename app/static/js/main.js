@@ -6,6 +6,7 @@ var spire = [2,3,4,12,15,24,28,29,30,31,33,38,40,44,45,59,61,77,78,79,101,102,10
 109,110,111,112,115];
 
 
+
 // need two global arrays to store names as when generate first line graph for average days
 // user need to select a day dropdown to call the second graph.
 var stationName;

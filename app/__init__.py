@@ -3,13 +3,15 @@
 
 #All #the view functions (the ones with a route() decorator on top) have to be imported in the __init__.py file. 
 #Not the object itself, but the module it is in. Import the view module after the application object is created.
-
 from flask import Flask
+import os
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 print('in init')
 
 application = Flask(__name__)
+
+application.secret_key=os.getenv('SECRET_KEY') 
 
 application.config.from_object('config.DevelopmentConfig')
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

@@ -2,9 +2,11 @@ from app import application
 from flask import render_template
 from flask import jsonify
 from flask import request
+from flask import session
 import pandas as pd
 import numpy as np
 from app.models import static_bike_data
+import functools
 from app.models import live_bike_data
 from app.models import staticbike_schema
 from app.models import bike_schema
@@ -19,10 +21,12 @@ from app import db
 import pickle
 import datetime as dt
 
+
 print('in views')
 
 
 @application.route('/static')
+@functools.lru_cache(maxsize=1)#cache static data to improve page load time
 def static_bike_info_json():
     station_info = static_bike_data.query.all()
     result = staticbike_schema.dump(station_info)
@@ -54,8 +58,26 @@ def weather_json():
 
 
 @application.route('/homepage')
-def test():
+def homepage():
+    add_visit()
     return render_template('index.html')
+
+#The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session 
+#This can be used to monitor the volume of traffic to the website
+def add_visit():
+    if 'visits' in session:
+        session['visits'] = session.get('visits') + 1  # reading and updating session data
+    else:
+        session['visits'] = 1 # setting session data
+ 
+@application.route('/show-visits')
+def show_visits():           
+    return "Total visits: {}".format(session.get('visits'))
+
+@application.route('/delete-visits')
+def delete_visits():
+    session.pop('visits', None) # delete visits
+    return 'Visits deleted'
 
 
 @application.route('/linegraphdays', methods=['POST', 'GET'])
