@@ -1,4 +1,3 @@
-from flask import jsonify
 from app import db
 from marshmallow import Schema, fields
 
@@ -34,37 +33,39 @@ class staticSchema(Schema):
 staticbike_schema = staticSchema(many=True)
 
 
-class live_bike_data(db.Model):# to go into models.py file
+class live_bike_data(db.Model):  # to go into models.py file
     ID = db.Column(db.Integer, primary_key=True)
     availableBikeStands = db.Column(db.Integer, primary_key=True)
-    availableBikes=db.Column(db.Integer, primary_key=True)
-    date=db.Column(db.DateTime(), primary_key=True)
-    time=db.Column(db.TIME, primary_key=True)
-    day=db.Column(db.String(80), primary_key=True)
-    epoch=db.Column(db.Integer)
+    availableBikes = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime(), primary_key=True)
+    time = db.Column(db.TIME, primary_key=True)
+    day = db.Column(db.String(80), primary_key=True)
+    epoch = db.Column(db.Integer)
 
     def __init__(self, ID, availableBikeStands, availableBikes, date, time, epoch):
         self.ID = ID
         self.availableBikeStands = availableBikeStands
-        self.availableBikes=availableBikes
-        self.date=date
-        self.time=time
-        self.day=day
-        self.epoch=epoch
+        self.availableBikes = availableBikes
+        self.date = date
+        self.time = time
+        self.day = day
+        self.epoch = epoch
+
 
 class liveSchema(Schema):
     ID = fields.Int(dump_only=True)
     availableBikeStands = fields.Int(dump_only=True)
     availableBikes = fields.Int(dump_only=True)
     date = fields.Date(dump_only=True)
-    time=fields.Time(dump_only=True)
+    time = fields.Time(dump_only=True)
     day = fields.Str()
-    epoch=fields.Int(dump_only=True)
+    epoch = fields.Int(dump_only=True)
     formatted_name = fields.Method("format_name", dump_only=True)
 
     def format_name(self, live_bike_data):
         return "{}, {}".format(live_bike_data.ID, live_bike_data.availableBikeStands,
-         live_bike_data.availableBikes, live_bike_data.date,live_bike_data.time,live_bike_data.day,live_bike_data.epoch )
+                               live_bike_data.availableBikes, live_bike_data.date, live_bike_data.time,
+                               live_bike_data.day, live_bike_data.epoch)
 
 
 bike_schema = liveSchema(many=True)
@@ -148,6 +149,7 @@ class future_weather_data(db.Model):
         self.tempFeels = tempFeels
         self.descripton = descripton
 
+
 class futureWeatherSchema(Schema):
     number = fields.Int(dump_only=True)
     temp = fields.Float(dump_only=True)
@@ -158,7 +160,6 @@ class futureWeatherSchema(Schema):
     date = fields.Date(dump_only=True)
     tempFeels = fields.Float(dump_only=True)
     descripton = fields.Str()
-
 
     def format_name(self, future_weather_data):
         return "{}, {}".format(future_weather_data.number, future_weather_data.temp, future_weather_data.rain,

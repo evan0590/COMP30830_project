@@ -21,12 +21,11 @@ from app import db
 import pickle
 import datetime as dt
 
-
 print('in views')
 
 
 @application.route('/static')
-@functools.lru_cache(maxsize=1)#cache static data to improve page load time
+@functools.lru_cache(maxsize=1)  # cache static data to improve page load time
 def static_bike_info_json():
     station_info = static_bike_data.query.all()
     result = staticbike_schema.dump(station_info)
@@ -52,7 +51,6 @@ def live_bike_info_json():
 def weather_json():
     weather = live_weather_data.query.order_by(live_weather_data.date.desc()).order_by(
         desc(live_weather_data.time)).limit(1).all()
-    # Serialize the queryset
     result = weather_schema.dump(weather)
     return jsonify(result)
 
@@ -62,21 +60,24 @@ def homepage():
     add_visit()
     return render_template('index.html')
 
-#The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session 
-#This can be used to monitor the volume of traffic to the website
+
+# The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session
+# This can be used to monitor the volume of traffic to the website
 def add_visit():
     if 'visits' in session:
         session['visits'] = session.get('visits') + 1  # reading and updating session data
     else:
-        session['visits'] = 1 # setting session data
- 
+        session['visits'] = 1  # setting session data
+
+
 @application.route('/show-visits')
-def show_visits():           
+def show_visits():
     return "Total visits: {}".format(session.get('visits'))
+
 
 @application.route('/delete-visits')
 def delete_visits():
-    session.pop('visits', None) # delete visits
+    session.pop('visits', None)  # delete visits
     return 'Visits deleted'
 
 
@@ -143,11 +144,8 @@ def predict():
     weather = future_weather_data.query.filter(future_weather_data.date == day).filter(
         future_weather_data.time == hour).all()
     result = future_weather_schema.dump(weather)
-    # creating dataframe for testing here.
     dataframe = pd.DataFrame(result)
-    # convert dateTime object column to datetime[ns] data type.
     dataframe.dateTime = pd.to_datetime(dataframe.dateTime)
-    # creating columns to match the training input dataset.
     morning_start = pd.to_datetime("05:00:00").time()
     morning_end = pd.to_datetime("12:00:00").time()
     afternoon_start = pd.to_datetime("12:01:00").time()
@@ -169,7 +167,6 @@ def predict():
                                   & (dataframe['dateTime'].dt.time < night_end),
                                   1, 0)
     dataframe["tod"] = dataframe.dateTime.dt.hour
-    # categorise weather codes
     dataframe["number"].replace([801, 802, 803, 804], 'clouds', inplace=True)
     dataframe["number"].replace([800], 'clear', inplace=True)
     dataframe["number"].replace([701, 711, 721, 731, 741, 751, 761, 762, 771, 781], 'Atmosphere', inplace=True)
@@ -177,14 +174,11 @@ def predict():
     dataframe["number"].replace([500, 501, 502, 503, 504, 511, 520, 521, 522, 531], 'rainfall', inplace=True)
     dataframe["number"].replace([300, 301, 302, 310, 311, 312, 313, 314, 321], 'drizzle', inplace=True)
     dataframe["number"].replace([200, 201, 202, 210, 211, 212, 221, 230, 231, 232], 'thunderstorm', inplace=True)
-    # add a flag that indicates whether a day is dry (has zero rain)
     dataframe['dry_day'] = (dataframe['rain'] == 0).astype(int)
-    # binary encode weather categories to match input dataset.
     dataframe['number_clear'] = np.where((dataframe['number'] == 'clear'), 1, 0)
     dataframe['number_clouds'] = np.where((dataframe['number'] == 'clouds'), 1, 0)
     dataframe['number_drizzle'] = np.where((dataframe['number'] == 'drizzle'), 1, 0)
     dataframe['number_rainfall'] = np.where((dataframe['number'] == 'rainfall'), 1, 0)
-    # binary encode times of the day to match input dataset.
     dataframe['tod_5'] = np.where((dataframe['tod'] == 5), 1, 0)
     dataframe['tod_6'] = np.where((dataframe['tod'] == 6), 1, 0)
     dataframe['tod_7'] = np.where((dataframe['tod'] == 7), 1, 0)
@@ -204,16 +198,13 @@ def predict():
     dataframe['tod_21'] = np.where((dataframe['tod'] == 21), 1, 0)
     dataframe['tod_22'] = np.where((dataframe['tod'] == 22), 1, 0)
     dataframe['tod_23'] = np.where((dataframe['tod'] == 23), 1, 0)
-    # replace days with numbers for generating the results of the different models
     dataframe.day.replace(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [0, 1, 2, 3, 4, 5, 6], inplace=True)
     if dataframe.day[0] == 5 or dataframe.day[0] == 6:
         with open('app/static/models_weekends/' + str(stationID) + '.pkl', 'rb') as handle:
             model = pickle.load(handle)
-            # binary encode days to match input dataset
         dataframe.day.replace([0, 1, 2, 3, 4, 5, 6], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                               inplace=True)
         dataframe['day_x_Sun'] = np.where((dataframe['day'] == 'Sun'), 1, 0)
-        # align columns with those found in the training dataset
         dataframe = dataframe[['temp', 'rain', 'morning', 'afternoon', 'evening', 'night', 'dry_day', 'day_x_Sun',
                                'number_clouds', 'number_drizzle', 'number_rainfall', 'tod_5', 'tod_6', 'tod_7',
                                'tod_8', 'tod_9', 'tod_10', 'tod_11', 'tod_12', 'tod_13', 'tod_14', 'tod_15', 'tod_16',
@@ -238,5 +229,3 @@ def predict():
         predict = np.around(predict)
         prediction = predict.tolist()
     return jsonify(prediction[0])
-
-

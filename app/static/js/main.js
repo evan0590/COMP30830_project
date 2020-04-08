@@ -23,11 +23,9 @@ function loadnewweather(){
 	$.getJSON('http://127.0.0.1:5000/futureweather', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			futureDates[i]=data[i].date + " " + data[i].day;
-//			futureDates[i]=data[i].date;
 
 		}
 
-        // removing duplicate dates
         var uniqueDays = [];
 			var count = 0;
 			var start = false;
@@ -54,7 +52,6 @@ function loadnewweather(){
 
 function populatenewDropdown(uniqueDays){
 	$.each(uniqueDays, function (i, element) {
-	//append dates name to dropdown
 	$('#futureDays').append($('<option></option>').val(element).html(element));
 	}
 
@@ -494,7 +491,6 @@ function futurePredict(){
 	var hourDropdown = document.getElementById("futurehours");
 	var selectedHour = hourDropdown.options[hourDropdown.selectedIndex].text;	
 
-	//post ID to flask and result is graph
 	jQuery.ajax ({
 	url: 'http://127.0.0.1:5000/predict',type: "POST",data: JSON.stringify([stationID,selectedDay,selectedHour]),dataType: "json",
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
@@ -603,5 +599,3 @@ function closestStation(lat, lon, unit) {
 }
 
 }
-
-
