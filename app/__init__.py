@@ -1,17 +1,18 @@
-#the #Flask application object creation has to be in the __init__.py file. 
-#That way each module can import it safely and the __name__ variable will resolve to the correct package.
+# the #Flask application object creation has to be in the __init__.py file.
+# That way each module can import it safely and the __name__ variable will resolve to the correct package.
 
-#All #the view functions (the ones with a route() decorator on top) have to be imported in the __init__.py file. 
-#Not the object itself, but the module it is in. Import the view module after the application object is created.
+# All #the view functions (the ones with a route() decorator on top) have to be imported in the __init__.py file.
+# Not the object itself, but the module it is in. Import the view module after the application object is created.
 from flask import Flask
 import os
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
+
 print('in init')
 
 application = Flask(__name__)
 
-application.secret_key=os.getenv('SECRET_KEY') 
+application.secret_key = os.getenv('SECRET_KEY')
 
 application.config.from_object('config.DevelopmentConfig')
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -21,8 +22,6 @@ from app.models import static_bike_data
 
 print('in init ran')
 
-
 print(f'ENV is set to: {application.config["ENV"]}')
 
 from app import views
-
