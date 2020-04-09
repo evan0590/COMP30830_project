@@ -64,6 +64,7 @@ def homepage():
 
 #The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session 
 #This can be used to monitor the volume of traffic to the website
+@application.route('/add-visits')
 def add_visit():
     if 'visits' in session:
         session['visits'] = session.get('visits') + 1  # reading and updating session data
