@@ -8,7 +8,9 @@ var spire = [2,3,4,12,15,24,28,29,30,31,33,38,40,44,45,59,61,77,78,79,101,102,10
 
 
 // need two global arrays to store names as when generate first line graph for average days
-// user need to select a day dropdown to call the second graph.
+// user need to select a day dropdown to call the second graph
+// stations global array used to store static station data
+// livebike global array used to store live occupancy station data
 var stationName;
 var stationID;
 var chartHours;
@@ -57,6 +59,7 @@ function populatenewDropdown(uniqueDays){
 
 )};
 
+//populates stations list with static bike data retrieved from db with Jquery
 
 function loadstaticbike(x){
 	$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
@@ -75,7 +78,7 @@ function loadstaticbike(x){
 		});
 };
 
-
+//populates stationdropdown with static bike data 
 function populateDropdown(stations){
 	$.each(stations, function (i, element) {
 	//append station name to dropdown
@@ -109,7 +112,7 @@ function loadliveBike(){
 		}
 		});
 };
-
+    
 //add in live occupancy info under dropdown menu for each station
 function populateInfo(live){
  $('select').on('change', function() {
@@ -117,6 +120,7 @@ function populateInfo(live){
 		 //search name user selects against static station array
 		 if (this.value==stations[i][1]){
 			 lineGraphDays(stations[i][0],this.value);
+             console.log('linegraphs run from dropdown')
 			 for (j=0; j<live.length; j++){
 				//find id match from static station array to id in live station info
 				if(stations[i][0]==live[j][0]){	
@@ -130,6 +134,7 @@ function populateInfo(live){
 			 }}}}
  })};
 
+//all map related data enclosed in initMap function
 function initMap(x) {
 	
 	var x = x;
@@ -163,10 +168,8 @@ function initMap(x) {
 	var sizeX;
 	var sizeY;
 	
-	// 4 for loop iterating through station variables and plotting markers in different
-    //function to set size of markers depending on number of available bikes at stations
-    //for each station against live bike info
-    //if avail bikes of that station>10
+
+    // marker function initially sets size of markers depending on number of available bikes at stations
 	function marker(){ 
 	for (i = 0; i < stations.length; i++) {
 		for (x = 0; x < livebike.length; x++){ 
@@ -181,6 +184,7 @@ function initMap(x) {
 				}
 			}
 		}
+    	//iterates through station data and plots markers for each station
 		if (stephensGreen.includes(stations[i][0])){
 			marker = new google.maps.Marker({
 			position: new google.maps.LatLng(stations[i][2], stations[i][3]),
@@ -214,6 +218,7 @@ function initMap(x) {
 			for (j = 0; j < livebike.length; j++){
 				if(stations[i][0]==livebike[j][0]){
 					lineGraphDays(stations[i][0],stations[i][1]);
+                    console.log('linegraphs run from marker')
 					infowindow.setContent('<b>Station: </b>'+stations[i][1]+ '<br><b>Station ID: </b>' + stations[i][0]+'<br><b>Available Stands: </b>'+livebike[j][1]+'<br><b>Available Bikes: </b>'+livebike[j][2]);}
             }                
 			infowindow.close();
