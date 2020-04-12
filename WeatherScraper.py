@@ -52,7 +52,7 @@ try:
 	#checks for duplicate row on database and if it is then it skips
 	try:
 		#pushes data to SQL table on database
-		cursor.execute("INSERT INTO live_weather_data (number, main,descripton,icon,temp,tempMin,tempMax,tempFeels,humidity,pressure,windSpeed,windDeg,rain,sunrise,sunset,date,time,day) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(number,main,description,icon,temp,tempMin,tempMax,tempFeels,humidity,pressure,windSpeed,windDeg,rain,sunriseTimeUpdate,sunsetTimeUpdate,dateUpdate,timeUpdate,dayUpdate))
+		cursor.execute("INSERT INTO live_weather_data (number, main,description,icon,temp,tempMin,tempMax,tempFeels,humidity,pressure,windSpeed,windDeg,rain,sunrise,sunset,date,time,day) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(number,main,description,icon,temp,tempMin,tempMax,tempFeels,humidity,pressure,windSpeed,windDeg,rain,sunriseTimeUpdate,sunsetTimeUpdate,dateUpdate,timeUpdate,dayUpdate))
 		conn.commit()
 	except:
 		pass
