@@ -1,3 +1,7 @@
+#Views file contains all routes we have identified for running database queries and displaying the output to our website.
+#Database schemas defined in the models file are imported to the views file, whereupon the jsonify function creates a response in JSON representation.
+#to be retrieved with our Javascript file.
+
 from app import application
 from flask import render_template
 from flask import jsonify
@@ -23,10 +27,17 @@ import datetime as dt
 
 print('in views')
 
+@application.route('/homepage')
+def homepage():
+    """Returns our homepage using index.html file as template"""
+    add_visit()#increment visit count in session
+    return render_template('index.html')
+
 
 @application.route('/static')
-@functools.lru_cache(maxsize=1)  # cache static data to improve page load time
+@functools.lru_cache(maxsize=1)  # as this data will not change, we cache it to improve page load time after the initial load
 def static_bike_info_json():
+    """Static route retrieves the required station data from the db"""
     station_info = static_bike_data.query.all()
     result = staticbike_schema.dump(station_info)
     return jsonify(result)
@@ -34,6 +45,7 @@ def static_bike_info_json():
 
 @application.route('/live')
 def live_bike_info_json():
+    """Live route retrieves the most up to date station occupancy data from the db"""
     today = str(date.today())
     print(today)
     # Find maximum time value using func.max for each station ID and store in subquery function
@@ -49,20 +61,15 @@ def live_bike_info_json():
 
 @application.route('/weather')
 def weather_json():
+    """Weather route retrieves the most up to date weather data from the db"""
     weather = live_weather_data.query.order_by(live_weather_data.date.desc()).order_by(
         desc(live_weather_data.time)).limit(1).all()
     result = weather_schema.dump(weather)
     return jsonify(result)
 
 
-@application.route('/homepage')
-def homepage():
-    add_visit()
-    return render_template('index.html')
-
-
-# The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session
-# This can be used to monitor the volume of traffic to the website
+#The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session 
+#This can be used to monitor the volume of traffic to the website
 def add_visit():
     if 'visits' in session:
         session['visits'] = session.get('visits') + 1  # reading and updating session data
