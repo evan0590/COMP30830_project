@@ -22,7 +22,7 @@ var locationsArray = []
 var distanceResults = []
 
 function loadnewweather(){
-	$.getJSON('http://127.0.0.1:5000/futureweather', function(data, status, xhr){
+	$.getJSON('http://18.233.150.27:8080/futureweather', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			futureDates[i]=data[i].date + " " + data[i].day;
 
@@ -62,7 +62,7 @@ function populatenewDropdown(uniqueDays){
 //populates stations list with static bike data retrieved from db with Jquery
 
 function loadstaticbike(x){
-	$.getJSON('http://127.0.0.1:5000/static', function(data, status, xhr){
+	$.getJSON('http://18.233.150.27:8080/static', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			//stations.push(data[i]);
 			stations[i]=[data[i].ID, String(data[i].name), data[i].Latitude, data[i].Longtitude];
@@ -96,7 +96,7 @@ function populateDropdown(stations){
 
 var loadalert = 0;
 function loadliveBike(){
-	$.getJSON('http://127.0.0.1:5000/live', function(data, status, xhr){
+	$.getJSON('http://18.233.150.27:8080/live', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			livebike[i]=[data[i].ID,String(data[i].availableBikeStands), String(data[i].availableBikes)];
 		}
@@ -464,7 +464,7 @@ function lineGraphDays(id,name){
 
 	//post ID to flask and result is graph
 	jQuery.ajax ({
-	url: 'http://127.0.0.1:5000/linegraphdays',type: "POST",data: JSON.stringify(id),dataType: "json",
+	url: 'http://18.233.150.27:8080/linegraphdays',type: "POST",data: JSON.stringify(id),dataType: "json",
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
 		// Line Graph
 		chartDays = new Chart(document.getElementById("line-chart"), {
@@ -481,7 +481,7 @@ function lineGraphHours(day){
     }
 	//post ID to flask and result is graph
 	jQuery.ajax ({
-	url: 'http://127.0.0.1:5000/linegraphhours', type: "POST", data: JSON.stringify([day,stationID]),
+	url: 'http://18.233.150.27:8080/linegraphhours', type: "POST", data: JSON.stringify([day,stationID]),
 	dataType: "json", contentType: "application/json; charset=utf-8", success: function(data, status, xhr){
 		chartHours = new Chart(document.getElementById("line-chart-hours"), {
 			type: 'line',data: {labels: ["8-9","9-10","10-11","11-12","12-13","13-14","14-15","15-16","16-17","17-18","18-19","19-20","20-21","21-22","22-23","23-00"],datasets: [{data: data,
@@ -497,7 +497,7 @@ function futurePredict(){
 	var selectedHour = hourDropdown.options[hourDropdown.selectedIndex].text;	
 
 	jQuery.ajax ({
-	url: 'http://127.0.0.1:5000/predict',type: "POST",data: JSON.stringify([stationID,selectedDay,selectedHour]),dataType: "json",
+	url: 'http://18.233.150.27:8080/predict',type: "POST",data: JSON.stringify([stationID,selectedDay,selectedHour]),dataType: "json",
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
 	    var predictInfo=('<br /> <b>Predicted Available Bikes: </b>'+ data);
 	    document.getElementById("predictionInfo").innerHTML = predictInfo;
@@ -505,7 +505,7 @@ function futurePredict(){
 	}})
 
 	jQuery.ajax ({
-	url: 'http://127.0.0.1:5000/futureweatherpredict',type: "POST",data: JSON.stringify([selectedDay,selectedHour]),dataType: "json",
+	url: 'http://18.233.150.27:8080/futureweatherpredict',type: "POST",data: JSON.stringify([selectedDay,selectedHour]),dataType: "json",
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
 	    var predictWeather=('<b>The temperature will feel like: </b>'+ data[0].tempFeels + '<sup>°C</sup>'
 	    + '<b> accompanied by: </b>' + data[0].descripton);
