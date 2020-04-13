@@ -27,6 +27,7 @@ import datetime as dt
 
 print('in views')
 
+@application.route('/')
 @application.route('/homepage')
 def homepage():
     """Returns our homepage using index.html file as template"""
@@ -68,7 +69,7 @@ def weather_json():
     return jsonify(result)
 
 
-#The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session 
+#The 3 functions below provide basic functionality for recording and viewing number of visits to the site, each of which comprises a session
 #This can be used to monitor the volume of traffic to the website
 def add_visit():
     if 'visits' in session:
@@ -88,6 +89,7 @@ def delete_visits():
     return 'Visits deleted'
 
 
+# This function for average occupancy per day graph.
 @application.route('/linegraphdays', methods=['POST', 'GET'])
 def lineGraphDays():
     days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -102,7 +104,7 @@ def lineGraphDays():
 
     return jsonify(dayAverageBikes)
 
-
+# This function for average occupancy per hour graph.
 @application.route('/linegraphhours', methods=['POST', 'GET'])
 def lineGraphHours():
     time = ["08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00",

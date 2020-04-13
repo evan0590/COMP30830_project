@@ -54,11 +54,12 @@
                             <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFfQele6SPurbIljoHv4tVF5USA_7y1-o&callback=initMap"></script>
   
                             <div class="NewRow">                           
-                                <div class="NewColumn" style="width: 20%">
+                                <div class="NewColumn" style="width: 15%">
                                     <div id="station">
                                         <div class="cont_blc_station">
                                             <div class="cont_fond_dynamq">
                                                 <h3><span>Legend</span></h3>
+												<br><p>Smaller size icon indicators less than 10 bikes available</p><br>
                                                 <div class="LegendRow">
                                                     <div class="TextColumn"><p>St. Stephen's Green<br></div>
                                                     <div class="IconColumn"><img class="icons" src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" width="22" height="22"  style="border:0px;" alt="green" title="green"/></div>
@@ -75,54 +76,71 @@
                                                     <div class="TextColumn"><p>The Spire<br></div>
                                                     <div class="IconColumn"><img  src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png" width="22" height="22"  style="border:0px;" alt="blue" title="blue"/></div>
                                                 </div>
-                                                <div class="LegendRow">
-                                                    <div class="TextColumnB">
-                                                        <p>
-                                                            <i class="material-icons" style="color:blue">directions_bike</i><br>
-                                                        </p>
-                                                    </div>
-                                                    <div class="IconColumnB">
-                                                        <p>
-                                                            <input type="button" value="on" onclick="traffic(1)">	
-                                                            <input type="button" value="off" onclick="traffic(2)">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="LegendRow">
-                                                    <div class="TextColumnB">
-                                                        <p>
-                                                            <i class="material-icons" style="color:blue">traffic</i><br>
-                                                        </p>
-                                                    </div>
-                                                    <div class="IconColumnB">
-                                                        <p>
-                                                            <input type="button" value="on" onclick="traffic(3)">	
-                                                            <input type="button" value="off" onclick="traffic(4)">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>    
-                                </div>
-    
-                                <div class="NewColumn">
-                                <div id="station">
-                                        <div class="cont_blc_station">
-                                            <div class="cont_fond_dynamq">
-                                                <h3><span>Journey planner</span></h3>
-                                                Start Point: <input type="text" id="start" name="startPoint">
-                                                <br><br>
-                                                End Point: <input type="text" id="end" name="endPoint" >
-                                                <input type="button" value="submit" onclick="calcRoute()">
-                                                <div id ="result"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-   
-                                <div class="NewColumn" style="border-radius: 25px;">
-                                    <div id="station" style="border-radius: 25px;">
+
+								<div class="NewColumn" style="width: 10%">
+									<div id="station">
+									<h3><span>Overlays</span></h3>
+									<br><p>Please click on/off buttons below to display cycling lane/traffic information</p><br>
+									<div class="LegendRow">
+										<div class="TextColumnB">
+											<p>
+												<i class="material-icons" style="color:blue">directions_bike</i><br>
+											</p>
+										</div>
+
+										<div class="IconColumnB">
+										<p>
+											<input type="button" value="on" onclick="traffic(1)">
+											<input type="button" value="off" onclick="traffic(2)">
+										</p>
+										</div>
+									</div>
+
+									<div class="LegendRow">
+										<div class="TextColumnB">
+											<p>
+												<i class="material-icons" style="color:blue">traffic</i><br>
+											</p>
+										</div>
+
+										<div class="IconColumnB">
+											<p>
+												<input type="button" value="on" onclick="traffic(3)">
+												<input type="button" value="off" onclick="traffic(4)">
+											</p>
+										</div>
+									</div>
+										<input type="button" value="Refresh Map" onclick="initMap(11)">
+										</div>
+								</div>
+
+
+                                <div class="NewColumn" style="width: 40%">
+                                <div id="station">
+                                        <div class="cont_blc_station">
+                                            <div class="cont_fond_dynamq">
+                                                <h3 ><span>Journey planner</span></h3>
+												<br><p>Please enter a start and end point ie Rathmines, The Spire etc. Use no punctuation in box ie Stephen's Green is Stephen Green.</p><br>
+                                                Start Point: <input type="text" id="start" name="startPoint" >
+                                                <br><br>
+                                                End Point: <input type="text" id="end" name="endPoint" >
+												<br>
+												<input type="button" value="submit" onclick="calcRoute()">
+
+												<div id="loader" style="display:none;" ></div>
+												<div id="result" class="animate-bottom"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="NewColumn" style="width: 25%">
+                                    <div id="station" align="left">
                                         <div class="cont_blc_station">
                                             <div class="cont_fond_dynamq">
                                                 <section class="ajax-section">
@@ -134,19 +152,19 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                         </div>
                         <div class="breaker"></div>
 
                     </div>
-                    
-                    <div class="bas_article"></div>       
-                </div>    
+
+                    <div class="bas_article"></div>
+                </div>
             </div>
             <!--Fin Contenu centre -->
-            
+
             <!--            stack overflow-->
-            <div class="Row">    
+            <div class="Row">
                 <div class="ColumnA">
                     <h4 class="titr_recherche">Select a station below for live updated information</h4>
                     <br>
@@ -170,12 +188,13 @@
                         <h4 id="predictionWeather"></h4><br>
 					</div>
                 </div>
-                
+
                 <div class="ColumnA">
 					<h4 class="titr_recherche">Average Bikes Available per day</h4>
+					<div id="loaderGraphDays" style="display:none;" ></div>
 					<canvas id="line-chart"></canvas>
                 </div>
-        
+
                 <div id ="Charting" class="ColumnA">
 					<h4 class="titr_recherche">Average Bikes Available per hour</h4>
 					<div id="dayDropdown" style="display: none;">
@@ -188,7 +207,8 @@
 							<option value="Saturday">Saturday</option>
 							<option value="Sunday">Sunday</option>
 						</select>
-					</div>	
+					</div>
+					<div id="loaderGraphHours" style="display:none;" ></div>
 					<canvas id="line-chart-hours"></canvas>
                 </div>
             </div>
