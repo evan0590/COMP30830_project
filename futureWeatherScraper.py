@@ -1,21 +1,32 @@
 import requests,json,datetime,time
 import pymysql
+import os
 
 try:
 	# connects to database
-	host="database-comp30830.c2kwpm1jk01q.us-east-1.rds.amazonaws.com"
-	port=3306
-	dbname="comp30830_db"
-	user="admin"
-	password="Simple12"
+	# host="database-comp30830.c2kwpm1jk01q.us-east-1.rds.amazonaws.com"
+	# port=3306
+	# dbname="comp30830_db"
+	# user="admin"
+	# password="Simple12"
+
+	host = os.environ.get('DB_HOST')
+	port = 3306
+	dbname = "comp30830_db"
+	user = os.environ.get('DB_USER')
+	password = os.environ.get('DB_PASS')
 
 	conn = pymysql.connect(host, user=user,port=port,passwd=password, db=dbname)
 	cursor = conn.cursor()
 
 	#makes call to api
-	url= "http://api.openweathermap.org/data/2.5/forecast?id=7778677&appid=736538126c6af13ebf7ef1b17a259cb4"
+	ID = os.environ.get('CITY_ID')
+	APPID = os.environ.get('CITY_APPID')
+	WEATHER_URI = "http://api.openweathermap.org/data/2.5/forecast"
+	response = requests.get(WEATHER_URI, params={"id": ID, "appid": APPID})
+	# url= "http://api.openweathermap.org/data/2.5/forecast?id=7778677&appid=736538126c6af13ebf7ef1b17a259cb4"
 
-	response = requests.get(url)
+	# response = requests.get(url)
 	data = response.text
 	parsed = json.loads(data)
 
