@@ -1,19 +1,23 @@
 import requests, json, datetime, time, pandas as pd
 import pymysql
+import os
 
 try:
     # connects to database
-    host = "database-comp30830.c2kwpm1jk01q.us-east-1.rds.amazonaws.com"
+    host = os.environ.get('DB_HOST')
     port = 3306
     dbname = "comp30830_db"
-    user = "admin"
-    password = "Simple12"
+    user = os.environ.get('DB_USER')
+    password = os.environ.get('DB_PASS')
 
     conn = pymysql.connect(host, user=user, port=port, passwd=password, db=dbname)
     cursor = conn.cursor()
 
     # makes call to api
-    url = "https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey=f2869ff03482662d9b79020b0a238225305f659f"
+    APIKEY = os.environ.get('BIKE_API')
+    NAME = "dublin"
+    WEATHER_URI = "https://api.jcdecaux.com/vls/v1/stations"
+    response = requests.get(WEATHER_URI, params={"apiKey": APIKEY, "contract": NAME})
 
     # saves api result as variables parsed
     response = requests.get(url)

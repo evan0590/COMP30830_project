@@ -3,13 +3,14 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sqlalchemy import create_engine
+import os
 
 try:
-    URI = 'database-comp30830.c2kwpm1jk01q.us-east-1.rds.amazonaws.com'
-    PORT = '3306'
-    DB = 'comp30830_db'
-    PASSWORD = 'Simple12'
-    USER = 'admin'
+    URI = os.environ.get('DB_HOST')
+    PORT = 3306
+    DB = "comp30830_db"
+    PASSWORD = os.environ.get('DB_PASS')
+    USER = os.environ.get('DB_USER')
 
     engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(USER, PASSWORD,
                                                                    URI, PORT, DB), echo=True)

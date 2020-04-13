@@ -3,13 +3,6 @@ import pymysql
 import os
 
 try:
-	# connects to database
-	# host="database-comp30830.c2kwpm1jk01q.us-east-1.rds.amazonaws.com"
-	# port=3306
-	# dbname="comp30830_db"
-	# user="admin"
-	# password="Simple12"
-
 	host = os.environ.get('DB_HOST')
 	port = 3306
 	dbname = "comp30830_db"
@@ -24,7 +17,6 @@ try:
 	APPID = os.environ.get('CITY_APPID')
 	WEATHER_URI = "http://api.openweathermap.org/data/2.5/forecast"
 	response = requests.get(WEATHER_URI, params={"id": ID, "appid": APPID})
-	# url= "http://api.openweathermap.org/data/2.5/forecast?id=7778677&appid=736538126c6af13ebf7ef1b17a259cb4"
 
 	# response = requests.get(url)
 	data = response.text
