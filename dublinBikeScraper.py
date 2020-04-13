@@ -17,10 +17,9 @@ try:
     APIKEY = os.environ.get('BIKE_API')
     NAME = "dublin"
     WEATHER_URI = "https://api.jcdecaux.com/vls/v1/stations"
-    response = requests.get(WEATHER_URI, params={"apiKey": APIKEY, "contract": NAME})
 
     # saves api result as variables parsed
-    response = requests.get(url)
+    response = requests.get(WEATHER_URI, params={"apiKey": APIKEY, "contract": NAME})
     data = response.text
     parsed = json.loads(data)
     length = len(parsed)
