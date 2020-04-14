@@ -91,7 +91,7 @@ def serialise_model_weekend(station_id):
     df.dropna(axis=0, how='any', inplace=True)
     model = LinearRegression(fit_intercept=False)
     model.fit(X, y)
-    with open('app/static/models_weekends/%s.pkl' % station_id, 'wb') as handle:
+    with open('/home/ubuntu/COMP30830_project/app/static/models_weekends/%s.pkl' % station_id, 'wb') as handle:
         pickle.dump(model, handle, pickle.HIGHEST_PROTOCOL)
 
 
