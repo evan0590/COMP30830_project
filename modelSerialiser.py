@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-bikes = pd.read_csv('csvfiles/allBikes.csv')
-weather = pd.read_csv('csvfiles/allWeather.csv')
+bikes = pd.read_csv('/home/ubuntu/COMP30830_project/csvfiles/allBikes.csv')
+weather = pd.read_csv('/home/ubuntu/COMP30830_project/csvfiles/allWeather.csv')
 bikes['datetime'] = pd.to_datetime(bikes['date'] + ' ' + bikes['time'])
 weather['datetime'] = pd.to_datetime(weather['date'] + ' ' + weather['time'])
 bikes = bikes.sort_values(by='datetime')
@@ -54,8 +54,8 @@ def serialise_model_weekday(station_id):
     upon the days of the week.
     """
     weekly_df = week_df.loc[(week_df.ID == station_id)]
-    weekly_df.to_csv('csvfiles/weeklyAvailableBikes.csv', index=False)
-    df = pd.read_csv('csvfiles/weeklyAvailableBikes.csv')
+    weekly_df.to_csv('/home/ubuntu/COMP30830_project/csvfiles/weeklyAvailableBikes.csv', index=False)
+    df = pd.read_csv('/home/ubuntu/COMP30830_project/csvfiles/weeklyAvailableBikes.csv')
     df.drop(["ID", "datetime"], axis=1, inplace=True)
     df["day_x"].replace([0, 1, 2, 3, 4, 5, 6], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], inplace=True)
     df = pd.get_dummies(df, drop_first=True)
@@ -77,8 +77,8 @@ def serialise_model_weekend(station_id):
     upon the days of the weekend.
     """
     weekend_df = endweek_df.loc[(endweek_df.ID == station_id)]
-    weekend_df.to_csv('csvfiles/weekendAvailableBikes.csv', index=False)
-    df = pd.read_csv('csvfiles/weekendAvailableBikes.csv')
+    weekend_df.to_csv('/home/ubuntu/COMP30830_project/csvfiles/weekendAvailableBikes.csv', index=False)
+    df = pd.read_csv('/home/ubuntu/COMP30830_project/csvfiles/weekendAvailableBikes.csv')
     df.drop(["ID", "datetime"], axis=1, inplace=True)
     df["day_x"].replace([0, 1, 2, 3, 4, 5, 6], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], inplace=True)
     df = pd.get_dummies(df, drop_first=True)

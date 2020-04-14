@@ -11,4 +11,4 @@ USER = os.environ.get('DB_USER')
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD,
                                                                URI, PORT, DB), echo=True)
 bikes = pd.read_sql_table('live_bike_data', engine)
-bikes.to_csv('csvfiles/allBikes.csv', index=False)
+bikes.to_csv('/home/ubuntu/COMP30830_project/csvfiles/allBikes.csv', index=False)
