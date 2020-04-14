@@ -146,6 +146,12 @@ body,button
     font-size:165%;
     padding:4px 0 2px 9px
 }
+
+.FurtherInfo{
+    color:#286679;
+    padding:4px 0 2px 9px
+}
+
 /*Journey planner*/
 /*Legend*/
 .LegendRow {

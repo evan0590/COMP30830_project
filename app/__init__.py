@@ -14,6 +14,7 @@ application = Flask(__name__)
 
 #Retrieve secret key used for app from environmental variable
 application.secret_key = os.getenv('SECRET_KEY')
+application.api_key = os.getenv('GOOGLEAPIKEY')
 
 #Set configuration for application from config.py file
 

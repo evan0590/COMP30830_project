@@ -24,6 +24,7 @@ from sqlalchemy.sql import func
 from app import db
 import pickle
 import datetime as dt
+import requests,json
 
 print('in views')
 
@@ -238,3 +239,15 @@ def predict():
         predict = np.around(predict)
         prediction = predict.tolist()
     return jsonify(prediction[0])
+
+# This function for average occupancy per hour graph.
+@application.route('/googleapi', methods=['POST', 'GET'])
+def googleapi():
+    apikey = application.api_key[:]
+    location = str(request.json)
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address="+location+",+Dublin&key="+apikey;
+    response = requests.get(url)
+    data = response.text
+    parsed = json.loads(data)
+
+    return jsonify(parsed)

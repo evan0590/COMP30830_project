@@ -135,6 +135,7 @@ function populateInfo(live){
 				//find id match from static station array to id in live station info
 				if(stations[i][0]==live[j][0]){
 					var Info=('<br /> <b>Available Bike Stands: </b>'+live[j][1]+ '<br /><br />'+'<b>Available Bikes: </b>'+live[j][2]);
+                    document.getElementById("bikeInfo").style.fontSize = "small";
 					document.getElementById("bikeInfo").innerHTML = Info;
 					// display day dropdown
 					var dayDropdown = document.getElementById("futureDayDropdown");
@@ -281,21 +282,23 @@ function findLatLongStart(x){
 
 	var location = x;
 
-	var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+location+",+Dublin&key=AIzaSyDFfQele6SPurbIljoHv4tVF5USA_7y1-o";
-
-	$.getJSON(url, function(data, status, xhr){
+		//post location to flask to call google api
+	jQuery.ajax ({
+	url: 'http://ec2-18-233-150-27.compute-1.amazonaws.com:8080/googleapi', type: "POST", data: JSON.stringify(location),
+	dataType: "json", contentType: "application/json; charset=utf-8", success: function(data, status, xhr){
 		try {
- 		var latitude = data["results"][0]["geometry"]["location"]["lat"];
-		var longitude = data["results"][0]["geometry"]["location"]["lng"];
-		locationsArray.push(latitude,longitude);
-		findLatLongEnd(endFormat)
+			var latitude = data["results"][0]["geometry"]["location"]["lat"];
+			var longitude = data["results"][0]["geometry"]["location"]["lng"];
+			locationsArray.push(latitude,longitude);
+			findLatLongEnd(endFormat)
 		}
 		catch(err) {
-		document.getElementById("result").style.display = "block";
-		document.getElementById("loader").style.display = "none";
-		document.getElementById("result").innerHTML ="The directions cannot be calculated at this time, please try again shortly and check accuracy of information provided"+"<br />";
+			document.getElementById("result").style.display = "block";
+			document.getElementById("loader").style.display = "none";
+			document.getElementById("result").innerHTML ="The directions cannot be calculated at this time, please try again shortly and check accuracy of information provided"+"<br />";
 		}
 
+		}
 		});
 }
 
@@ -304,9 +307,10 @@ function findLatLongEnd(x){
 
 	var location = x;
 
-	var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+location+",+Dublin&key=AIzaSyDFfQele6SPurbIljoHv4tVF5USA_7y1-o";
-
-	$.getJSON(url, function(data, status, xhr){
+		//post location to flask to call google api
+	jQuery.ajax ({
+	url: 'http://ec2-18-233-150-27.compute-1.amazonaws.com:8080/googleapi', type: "POST", data: JSON.stringify(location),
+	dataType: "json", contentType: "application/json; charset=utf-8", success: function(data, status, xhr){
 		try {
  		var latitude = data["results"][0]["geometry"]["location"]["lat"];
 		var longitude = data["results"][0]["geometry"]["location"]["lng"];
@@ -318,7 +322,8 @@ function findLatLongEnd(x){
 		document.getElementById("loader").style.display = "none";
 		document.getElementById("result").innerHTML ="The directions cannot be calculated at this time, please try again shortly and check accuracy of information provided"+"<br />";
 		}
-		});
+	}
+	});
 }
 
 
@@ -482,9 +487,9 @@ function directionsText(){
 
 		document.getElementById("result").innerHTML ="<i class="+'"material-icons"'+"style="+">"+"directions_walk"+"</i>"+" "+distanceAtoB+" from "+starttext.toUpperCase()+" to station ID:"+distanceResults[0]+" Name: "+distanceResults[1]+". Available Bikes:"+availableBikes+"<br />"+
 
-		"<i class="+'"material-icons"'+"style="+">"+"directions_bike"+"</i>"+" "+distanceBtoC+" from station ID:"+distanceResults[0]+" Name: "+distanceResults[1]+" to station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+"<br />"+
+		"<i class="+'"material-icons"'+"style="+">"+"directions_bike"+"</i>"+" "+distanceBtoC+" from station ID:"+distanceResults[0]+" Name: "+distanceResults[1]+" to station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+". Available Stands:"+availableStands+"<br />"+
 
-		"<i class="+'"material-icons"'+"style="+">"+"directions_walk"+"</i>"+" "+distanceCtoD+" from station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+" to "+ endtext.toUpperCase()+". Available Stands:"+availableStands+"<br />"+"<br />"
+		"<i class="+'"material-icons"'+"style="+">"+"directions_walk"+"</i>"+" "+distanceCtoD+" from station ID:"+distanceResults[3]+" Name: "+distanceResults[4]+" to "+ endtext.toUpperCase()+"<br />"
 	}
 		//reset global variables.
 		distanceAtoB=0;
@@ -532,6 +537,7 @@ function lineGraphDays(id,name){
 
 // Similar to the above function this generates average occupancy per open hour of a selected station.
 function lineGraphHours(day){
+	document.getElementById("loaderGraphHours").style.display = "block";
 	if(chartHours!=null){
         chartHours.destroy();
     }
@@ -560,6 +566,7 @@ function futurePredict(){
 	contentType: "application/json; charset=utf-8",success: function(data, status, xhr){
 	    var predictInfo=('<br /> <b>Predicted Available Bikes: </b>'+ data);
 	    document.getElementById("predictionInfo").innerHTML = predictInfo;
+        document.getElementById("predictionInfo").style.fontSize = "small";
 
 	}})
 
@@ -569,6 +576,7 @@ function futurePredict(){
 	    var predictWeather=('<b>The temperature will feel like: </b>'+ data[0].tempFeels + '<sup>°C</sup>'
 	    + '<b> accompanied by: </b>' + data[0].descripton);
 	    document.getElementById("predictionWeather").innerHTML = predictWeather;
+        document.getElementById("predictionWeather").style.fontSize = "small";
 
 	}})
 	;

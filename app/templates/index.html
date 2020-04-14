@@ -164,15 +164,18 @@
             <!--Fin Contenu centre -->
 
             <!--            stack overflow-->
+
             <div class="Row">
                 <div class="ColumnA">
-                    <h4 class="titr_recherche">Select a station below for live updated information</h4>
+                    <br>
+                    <h3 class = "FurtherInfo"><span>Select a station below for live updated information</span></h3>
                     <br>
                     <select id="stationdrop" class="dropdowns">
         			</select>
 					<h4 id="bikeInfo"></h4><br>
 					<div id="futureDayDropdown" style="display: none;">
-						<h4 class="titr_recherche">Select a day and time below for predicted weather and bike availability at this station</h4>
+						<h3 class="FurtherInfo"><span>Bike availability and weather predictor</span></h3>
+                        <br>
 						<select id="futureDays" class="dropdowns">
 						</select>
 						<select id="futurehours" class="dropdowns">
@@ -190,13 +193,17 @@
                 </div>
 
                 <div class="ColumnA">
-					<h4 class="titr_recherche">Average Bikes Available per day</h4>
+                    <br>
+					<h3 class = "FurtherInfo"><span>Average Bikes Available per day</span></h3>
+                    <br>
 					<div id="loaderGraphDays" style="display:none;" ></div>
 					<canvas id="line-chart"></canvas>
                 </div>
 
                 <div id ="Charting" class="ColumnA">
-					<h4 class="titr_recherche">Average Bikes Available per hour</h4>
+                    <br>
+					<h3 class = "FurtherInfo"><span>Average Bikes Available per hour</span></h3>
+                    <br>
 					<div id="dayDropdown" style="display: none;">
 						<select id="days" onchange="lineGraphHours(this.value);">
 							<option value="Monday">Monday</option>
