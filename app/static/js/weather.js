@@ -3,7 +3,7 @@ const list = document.querySelector(".ajax-section .cities");
 
 function loadWeather() {
 
-	$.getJSON('http://ec2-35-174-104-222.compute-1.amazonaws.com:8080/weather', function(data, status, xhr){
+	$.getJSON('http://ec2-52-87-181-248.compute-1.amazonaws.com:8080/weather', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			liveweather[i]=[String(data[i].description), String(data[i].icon), data[i].temp,
 			data[i].tempFeels,data[i].windSpeed,data[i].humidity,data[i].pressure];
