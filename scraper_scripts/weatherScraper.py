@@ -16,7 +16,7 @@ try:
     # makes call to api
     ID = os.environ.get('CITY_ID')
     APPID = os.environ.get('CITY_APPID')
-    WEATHER_URI = "http://api.openweathermap.org/data/2.5/forecast"
+    WEATHER_URI = "http://api.openweathermap.org/data/2.5/weather"
     response = requests.get(WEATHER_URI, params={"id": ID, "appid": APPID})
 
     data = response.text
