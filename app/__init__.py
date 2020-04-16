@@ -18,7 +18,7 @@ application.api_key = os.getenv('GOOGLEAPIKEY')
 
 #Set configuration for application from config.py file
 
-application.config.from_object('config.DevelopmentConfig')
+application.config.from_object('config.ProductionConfig')
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(application)
 
