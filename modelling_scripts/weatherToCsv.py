@@ -11,4 +11,4 @@ USER = os.environ.get('DB_USER')
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD,
                                                                URI, PORT, DB), echo=True)
 weather = pd.read_sql_table('live_weather_data', engine)
-weather.to_csv('/home/ubuntu/COMP30830_project/csvfiles/allWeather.csv', index=False)
+weather.to_csv('/home/ubuntu/COMP30830_project/csv_files/allWeather.csv', index=False)
