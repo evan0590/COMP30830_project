@@ -45,7 +45,11 @@ try:
                   "pressure", "windSpeed", "windDeg", "sunrise", "sunset",
                   "date_y", "time_y", "day_y"], axis=1, inplace=True)
     full_df = full_df.rename(columns={"availableBikes": "target"})
-    full_df.to_csv('/home/ubuntu/COMP30830_project/csv_files/modellingTable.csv', index=False)
+    weekday_df = full_df.loc[(full_df['day_x'] >= 0) & (full_df['day_x'] <= 4)]
+    weekday_df.to_csv('/home/ubuntu/COMP30830_project/csv_files/weeklyAvailableBikes.csv', index=False)
+    weekends_df = full_df.loc[(full_df['day_x'] >= 5) & (full_df['day_x'] <= 6)]
+    weekends_df.to_csv('/home/ubuntu/COMP30830_project/csv_files/weekendAvailableBikes.csv', index=False)
+    # full_df.to_csv('/home/ubuntu/COMP30830_project/csv_files/modellingTable.csv', index=False)
 
 except:
     print("Model CSV failed.", time.time())
