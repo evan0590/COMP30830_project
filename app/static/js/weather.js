@@ -2,13 +2,11 @@ liveweather=[];
 const list = document.querySelector(".ajax-section .cities");
 
 function loadWeather() {
-    console.log(list);
 
-	$.getJSON('http://127.0.0.1:5000/weather', function(data, status, xhr){
+	$.getJSON('http://ec2-52-87-181-248.compute-1.amazonaws.com:8080/weather', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
 			liveweather[i]=[String(data[i].description), String(data[i].icon), data[i].temp,
 			data[i].tempFeels,data[i].windSpeed,data[i].humidity,data[i].pressure];
-		console.log(liveweather)
 
 		const description = liveweather[0][0];
 		const icon = `https://openweathermap.org/img/wn/${liveweather[0][1]}@2x.png`
@@ -17,10 +15,8 @@ function loadWeather() {
 		const windSpeed = liveweather[0][4];
 		const humidity = liveweather[0][5];
 		const pressure = liveweather[0][6];
-		console.log(icon);
 
       const li = document.createElement("li");
-        console.log(li)
       li.getElementsByClassName("weatherList");
       const markup = `
             <h3><span>Weather</span></h3>
@@ -36,14 +32,10 @@ function loadWeather() {
                     </div>
                 </div>
             `;
-        console.log(markup)
         li.innerHTML = markup;
-        console.log(list)
         list.appendChild(li);
         }
     });
 
 };
-loadWeather(); //put this in for addlistener to update
-
-console.log(liveweather);
+loadWeather();
