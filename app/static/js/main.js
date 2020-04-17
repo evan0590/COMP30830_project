@@ -25,6 +25,7 @@ var distanceAtoB;
 var distanceBtoC;
 var distanceCtoD;
 
+//populates futuredates list with future weather data retrieved from db with Jquery
 function loadnewweather(x){
 	$.getJSON('http://ec2-52-87-181-248.compute-1.amazonaws.com:8080/futureweather', function(data, status, xhr){
 		for (var i = 0; i < data.length; i++ ) {
@@ -59,7 +60,7 @@ function loadnewweather(x){
 
 };
 
-
+//append to dropdown list with unique days
 function populatenewDropdown(uniqueDays){
 	$.each(uniqueDays, function (i, element) {
 	$('#futureDays').append($('<option></option>').val(element).html(element));
@@ -104,6 +105,8 @@ function populateDropdown(stations){
 
 //this var is a counter to make sure that alert box with nearest station only appears on first load.
 var loadalert = 0;
+
+//populates livebike list with dynamic bike station data retrieved from db with Jquery
 
 function loadliveBike(){
 	$.getJSON('http://ec2-52-87-181-248.compute-1.amazonaws.com:8080/live', function(data, status, xhr){
