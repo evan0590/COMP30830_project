@@ -12,7 +12,8 @@ try:
         """Function to generate a model for each station based
         upon the days of the week.
         """
-        df = week_df.loc[(week_df.ID == station_id)]
+        df_rev1 = week_df.loc[(week_df.ID == station_id)]
+        df = df_rev1.copy()
         df.drop(["ID", "datetime"], axis=1, inplace=True)
         df["day_x"].replace([0, 1, 2, 3, 4, 5, 6], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], inplace=True)
         df = pd.get_dummies(df, drop_first=True)
@@ -33,7 +34,8 @@ try:
         """Function to generate a model for each station based
         upon the days of the weekend.
         """
-        df = weekend_df.loc[(weekend_df.ID == station_id)]
+        df_rev1 = week_df.loc[(week_df.ID == station_id)]
+        df = df_rev1.copy()
         df.drop(["ID", "datetime"], axis=1, inplace=True)
         df["day_x"].replace([0, 1, 2, 3, 4, 5, 6], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], inplace=True)
         df = pd.get_dummies(df, drop_first=True)
